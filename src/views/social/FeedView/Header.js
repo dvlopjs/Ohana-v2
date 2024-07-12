@@ -11,20 +11,11 @@ const Header = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <div
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
-      <Typography
-        variant="overline"
-        color="textSecondary"
-      >
+    <div className={clsx(classes.root, className)} {...rest}>
+      <Typography variant="overline" color="textSecondary">
         Social Feed
       </Typography>
-      <Typography
-        variant="h3"
-        color="textPrimary"
-      >
+      <Typography variant="h3" color="textPrimary">
         Here&apos;s what your connections posted
       </Typography>
     </div>

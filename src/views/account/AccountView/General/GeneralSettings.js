@@ -29,11 +29,15 @@ const useStyles = makeStyles(() => ({
 const GeneralSettings = ({ className, user, ...rest }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [selectedState, setSelectedState] = useState(user.additional_info.province);
+  const [selectedState, setSelectedState] = useState(
+    user.additional_info ? user.additional_info.province : ''
+  );
   const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(user.additional_info.city);
+  const [selectedCity, setSelectedCity] = useState(
+    user.additional_info ? user.additional_info.city : ''
+  );
 
-  const fetchCities = async (state) => {
+  const fetchCities = async state => {
     try {
       const response = await API.getCities(state);
       setCities(response);
@@ -52,29 +56,31 @@ const GeneralSettings = ({ className, user, ...rest }) => {
   };
 
   useEffect(() => {
-    setSelectedCity(user.additional_info.city);
-    setSelectedState(user.additional_info.province);
-    fetchCities(user.additional_info.province);
+    setSelectedCity(user.additional_info ? user.additional_info.city : '');
+    setSelectedState(user.additional_info ? user.additional_info.province : '');
+    fetchCities(user.additional_info ? user.additional_info.province : '');
   }, []);
 
   return (
     <Formik
       enableReinitialize
       initialValues={{
-        city: user.additional_info.city || '',
-        country: user.additional_info.country.name || '',
+        city: user.additional_info ? user.additional_info.city : '',
+        country: user.additional_info ? user.additional_info.country.name : '',
         email: user.email || '',
-        first_name: user.additional_info.first_name || '',
-        last_name: user.additional_info.last_name || '',
-        phone: user.additional_info.phone || '',
-        province: user.additional_info.province || '',
+        first_name: user.additional_info ? user.additional_info.first_name : '',
+        last_name: user.additional_info ? user.additional_info.last_name : '',
+        phone: user.additional_info ? user.additional_info.phone : '',
+        province: user.additional_info ? user.additional_info.province : '',
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        city: Yup.string().max(255)
+        city: Yup.string()
+          .max(255)
           .max(255)
           .required('Una ciudad es requerida'),
-        country: Yup.string().max(255)
+        country: Yup.string()
+          .max(255)
           .max(255)
           .required('Un país es requerido'),
         email: Yup.string()
@@ -98,6 +104,7 @@ const GeneralSettings = ({ className, user, ...rest }) => {
         values,
         { resetForm, setErrors, setStatus, setSubmitting }
       ) => {
+        console.log('submiteando');
         values.country = 1;
         values.province = selectedState || user.additional_info.province;
         values.city = selectedCity || user.additional_info.city;
@@ -126,17 +133,17 @@ const GeneralSettings = ({ className, user, ...rest }) => {
       }}
     >
       {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values
-        }) => (
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values
+      }) => (
         <form onSubmit={handleSubmit}>
           <Card className={clsx(classes.root, className)} {...rest}>
-            <CardHeader title='Perfil' />
+            <CardHeader title="Perfil" />
             <Divider />
             <CardContent>
               <Grid container spacing={4}>
@@ -145,12 +152,12 @@ const GeneralSettings = ({ className, user, ...rest }) => {
                     error={Boolean(touched.first_name && errors.first_name)}
                     fullWidth
                     helperText={touched.first_name && errors.first_name}
-                    label='Nombre'
-                    name='first_name'
+                    label="Nombre"
+                    name="first_name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.first_name}
-                    variant='outlined'
+                    variant="outlined"
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
@@ -158,12 +165,12 @@ const GeneralSettings = ({ className, user, ...rest }) => {
                     error={Boolean(touched.last_name && errors.last_name)}
                     fullWidth
                     helperText={touched.last_name && errors.last_name}
-                    label='Apellido'
-                    name='last_name'
+                    label="Apellido"
+                    name="last_name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.last_name}
-                    variant='outlined'
+                    variant="outlined"
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
@@ -171,47 +178,47 @@ const GeneralSettings = ({ className, user, ...rest }) => {
                     error={Boolean(touched.phone && errors.phone)}
                     fullWidth
                     helperText={touched.phone && errors.phone}
-                    label='Número de celular'
-                    name='phone'
+                    label="Número de celular"
+                    name="phone"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.phone}
-                    variant='outlined'
+                    variant="outlined"
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     error={Boolean(touched.email && errors.email)}
                     fullWidth
-                    helperText={ touched.email && errors.email}
-                    label='Email'
-                    name='email'
+                    helperText={touched.email && errors.email}
+                    label="Email"
+                    name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
-                    type='email'
+                    type="email"
                     value={values.email}
-                    variant='outlined'
+                    variant="outlined"
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <Countries type='update' value={values.country} />
+                  <Countries type="update" value={values.country} />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <Autocomplete
-                    className='autocomplete'
+                    className="autocomplete"
                     sx={{ width: 300 }}
                     options={STATES}
                     inputValue={selectedState}
                     autoHighlight
                     onInputChange={onStateChange}
-                    getOptionLabel={(option) => option}
-                    renderOption={(option) => option}
-                    renderInput={(params) => (
+                    getOptionLabel={option => option}
+                    renderOption={option => option}
+                    renderInput={params => (
                       <TextField
                         {...params}
-                        variant='outlined'
-                        label='Seleccione una provincia'
+                        variant="outlined"
+                        label="Seleccione una provincia"
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: 'new-password'
@@ -222,26 +229,26 @@ const GeneralSettings = ({ className, user, ...rest }) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <Autocomplete
-                      className='autocomplete'
-                      sx={{ width: 300 }}
-                      options={cities}
-                      autoHighlight
-                      onInputChange={onCityChange}
-                      inputValue={selectedCity}
-                      getOptionLabel={(option) => option}
-                      renderOption={(option) => option}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant='outlined'
-                          label='Seleccione una ciudad'
-                          inputProps={{
-                            ...params.inputProps,
-                            autoComplete: 'new-password'
-                          }}
-                        />
-                      )}
-                    />
+                    className="autocomplete"
+                    sx={{ width: 300 }}
+                    options={cities}
+                    autoHighlight
+                    onInputChange={onCityChange}
+                    inputValue={selectedCity}
+                    getOptionLabel={option => option}
+                    renderOption={option => option}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Seleccione una ciudad"
+                        inputProps={{
+                          ...params.inputProps,
+                          autoComplete: 'new-password'
+                        }}
+                      />
+                    )}
+                  />
                 </Grid>
                 {/*<Grid item md={6} xs={12}>
                   <Typography
@@ -289,12 +296,12 @@ const GeneralSettings = ({ className, user, ...rest }) => {
               )}
             </CardContent>
             <Divider />
-            <Box p={2} display='flex' justifyContent='flex-end'>
+            <Box p={2} display="flex" justifyContent="flex-end">
               <Button
-                color='secondary'
+                color="secondary"
                 disabled={isSubmitting}
-                type='submit'
-                variant='contained'
+                type="submit"
+                variant="contained"
               >
                 Guardar cambios
               </Button>

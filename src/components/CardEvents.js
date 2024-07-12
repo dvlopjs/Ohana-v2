@@ -1,6 +1,7 @@
 import {
   Avatar,
-  Box, Button,
+  Box,
+  Button,
   Card,
   CardMedia,
   colors,
@@ -11,15 +12,13 @@ import {
   makeStyles,
   SvgIcon,
   Tooltip,
-  Typography,
-  Dialog,
-  DialogTitle
+  Typography
 } from '@material-ui/core';
 import Heart from '../assets/corazon.png';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StitchIcon from '../assets/Stitch-heart.svg';
 import StitchDislike from '../assets/Stitch-dislike.png';
-import './Components.css'
+import './Components.css';
 import EditIcon from '@material-ui/icons/Edit';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -48,7 +47,6 @@ const useStyles = makeStyles(theme => ({
   },
   donateButton: {
     color: colors.amber[600]
-
   },
   caption: {
     minHeight: '20px'
@@ -74,7 +72,6 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
 
 moment.locale('es');
 
@@ -102,8 +99,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
     setOpenShare(false);
   };
 
-  const handleEdit = () => {
-  };
+  const handleEdit = () => {};
   useEffect(() => {
     api.getEvents();
   }, []);
@@ -117,54 +113,62 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Aceptar'
-    }).then((result) => {
+    }).then(result => {
       if (result.isConfirmed) {
-        api.deleteCampaign(project.id).then(response => {
-          Swal.fire({
-            title: '¡Su campaña fue eliminada!',
-            icon: 'success',
-            timer: 2000
-          }).then(resultConf => {
-            if (resultConf.isConfirmed) {
-              window.location.reload();
-            }
+        api
+          .deleteCampaign(project.id)
+          .then(response => {
+            Swal.fire({
+              title: '¡Su campaña fue eliminada!',
+              icon: 'success',
+              timer: 2000
+            }).then(resultConf => {
+              if (resultConf.isConfirmed) {
+                window.location.reload();
+              }
+            });
+          })
+          .catch(() => {
+            Swal.fire(
+              '¡Oops!',
+              'Ha ocurrido un error, inténtelo de nuevo luego',
+              'error'
+            );
           });
-        }).catch(() => {
-          Swal.fire(
-            '¡Oops!',
-            'Ha ocurrido un error, inténtelo de nuevo luego',
-            'error'
-          );
-        });
       }
     });
   };
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <Box p={3}>
         <CardMedia
           className={classes.image}
-          image={project.image || 'https://www.argentina.gob.ar/sites/default/files/vinetas_justicia_cerca_04_quiero_donar_mis_organos.png'}
+          image={
+            project.image ||
+            'https://www.argentina.gob.ar/sites/default/files/vinetas_justicia_cerca_04_quiero_donar_mis_organos.png'
+          }
         />
-        <Box display='flex' alignItems='center' mt={2}>
+        <Box display="flex" alignItems="center" mt={2}>
           <Avatar
-            alt='Author'
-            src='https://static1.abc.es/media/play/2020/09/29/avatar-kE4H--620x349@abc.jpeg'
+            alt="Author"
+            src="https://static1.abc.es/media/play/2020/09/29/avatar-kE4H--620x349@abc.jpeg"
           >
             {getInitials(project.contact.name)}
           </Avatar>
           <Box className={classes.nameBox} ml={2}>
             <Tooltip title={project.name}>
-              <Typography noWrap variant='body2' color='textSecondary'>
+              <Typography noWrap variant="body2" color="textSecondary">
                 <Link
-                  color='textPrimary'
+                  color="textPrimary"
                   component={RouterLink}
                   to={`/app/projects/overview/${project.id}`}
-                  variant='h5'
+                  variant="h5"
                 >
                   {project.name}
                 </Link>
-              </Typography></Tooltip>
+              </Typography>
+            </Tooltip>
             <div
               style={{
                 overflow: 'hidden',
@@ -177,13 +181,13 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
                   project.updated_at
                 ).fromNow()}`}
               >
-                <Typography noWrap variant='body2' color='textSecondary'>
+                <Typography noWrap variant="body2" color="textSecondary">
                   Por{' '}
                   <Link
-                    color='textPrimary'
+                    color="textPrimary"
                     component={RouterLink}
-                    to='#'
-                    variant='h6'
+                    to="#"
+                    variant="h6"
                   >
                     {project.contact.name}
                   </Link>{' '}
@@ -200,109 +204,117 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
         style={{ overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}
       >
         <Tooltip title={project.description.replace(/<\/?[^>]+(>|$)/g, '')}>
-          <Typography noWrap color='textSecondary' variant='body2'>
+          <Typography noWrap color="textSecondary" variant="body2">
             {project.description.replace(/<\/?[^>]+(>|$)/g, '')}
           </Typography>
         </Tooltip>
       </Box>
       <Box py={2} px={2} className={classes.description}>
-        <Grid alignItems='center' container justify='space-between' spacing={3}>
+        <Grid alignItems="center" container justify="space-between" spacing={3}>
           <Grid item>
-            <Typography variant='h5' color='textPrimary'>
+            <Typography variant="h5" color="textPrimary">
               {!!project.goal
                 ? numeral(project.goal).format(`$0.00`)
                 : numeral(project.donations_count).format(`$0.00`)}
             </Typography>
-            <Typography noWrap variant='body2' color='textSecondary'>
+            <Typography noWrap variant="body2" color="textSecondary">
               Objetivo
             </Typography>
           </Grid>
           <Grid item>
-            <div
-              className={classes.secondDiv}
-            >
+            <div className={classes.secondDiv}>
               <Tooltip title={project.location.street}>
-                <Typography noWrap variant='h5' color='textPrimary'>
+                <Typography noWrap variant="h5" color="textPrimary">
                   {project.location.street}
                 </Typography>
               </Tooltip>
-              <Typography variant='body2' color='textSecondary'>
+              <Typography variant="body2" color="textSecondary">
                 Ubicación
               </Typography>
             </div>
           </Grid>
           <Grid item>
-            <Typography noWrap variant='h5' color='textPrimary'>
+            <Typography noWrap variant="h5" color="textPrimary">
               {project.event_type.id === 1 ? 'Monetaria' : 'Física'}
             </Typography>
-            <Typography variant='body2' color='textSecondary'>
+            <Typography variant="body2" color="textSecondary">
               Tipo
             </Typography>
           </Grid>
         </Grid>
       </Box>
       <Divider />
-      <Box py={2} pl={2} pr={2} display='flex' alignItems='center' bottom>
+      <Box py={2} pl={2} pr={2} display="flex" alignItems="center">
         {userMode ? (
           <div>
-            <Tooltip title='Eliminar campaña'>
-              <IconButton
-                onClick={deleteCampaign}
-              >
-                <DeleteIcon fontSize='small' />
+            <Tooltip title="Eliminar campaña">
+              <IconButton onClick={deleteCampaign}>
+                <DeleteIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-            <Tooltip title='Modificar campaña'>
+            <Tooltip title="Modificar campaña">
               <IconButton
                 component={RouterLink}
-                to={`/app/projects/edit/${project.id}`}>
-                <EditIcon fontSize='small' />
+                to={`/app/projects/edit/${project.id}`}
+              >
+                <EditIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           </div>
         ) : (
           <div className={classes.buttonsDiv}>
             {isLiked ? (
-              <Tooltip title='Unlike'>
-                <IconButton className={classes.likedButton} onClick={handleUnlike}>
+              <Tooltip title="Unlike">
+                <IconButton
+                  className={classes.likedButton}
+                  onClick={handleUnlike}
+                >
                   <Avatar src={StitchIcon} />
                 </IconButton>
               </Tooltip>
             ) : (
-              <Tooltip title='Like'>
+              <Tooltip title="Like">
                 <IconButton onClick={handleLike}>
                   <Avatar src={StitchDislike} />
                 </IconButton>
               </Tooltip>
             )}
-            <Typography variant='subtitle2' color='textSecondary'>
+            <Typography variant="subtitle2" color="textSecondary">
               {likesCount}
             </Typography>
-            <Tooltip title='Compartir'>
+            <Tooltip title="Compartir">
               <IconButton onClick={openShareDialog}>
                 <SvgIcon
-                  fontSize='small'
-                  color='action'
+                  fontSize="small"
+                  color="action"
                   className={classes.membersIcon}
                 >
                   <ShareIcon />
                 </SvgIcon>
               </IconButton>
             </Tooltip>
-          </div>)}
+          </div>
+        )}
         <Box flexGrow={1} />
-        <Tooltip title='Donar'>
-          <Button className={classes.donateButton} href={`/app/donate/${project.id}`}>
+        <Tooltip title="Donar">
+          <Button
+            className={classes.donateButton}
+            href={`/app/donate/${project.id}`}
+          >
             <Avatar src={Heart}></Avatar>
-            <Typography variant='error' color='textPrimary' style={{ marginLeft: '5px' }}>
+            <Typography color="textPrimary" style={{ marginLeft: '5px' }}>
               Dona!
             </Typography>
           </Button>
         </Tooltip>
       </Box>
-      {!!openShare && 
-        <ShareDialog project={project} openShare={openShare} closeDialog={closeShareDialog} />
-      }
+      {!!openShare && (
+        <ShareDialog
+          project={project}
+          openShare={openShare}
+          closeDialog={closeShareDialog}
+        />
+      )}
     </Card>
   );
 };

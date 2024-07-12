@@ -47,13 +47,13 @@ const Ottro = () => {
 };
 
 const UserDetails = ({
-                       setData,
-                       event,
-                       className,
-                       onBack,
-                       onNext,
-                       ...rest
-                     }) => {
+  setData,
+  event,
+  className,
+  onBack,
+  onNext,
+  ...rest
+}) => {
   const classes = useStyles();
   const [error, setError] = useState(null);
   let [categoryOption, setCategoryOption] = useState([]); // Me carga el  json con las opciones
@@ -122,7 +122,7 @@ const UserDetails = ({
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Aceptar'
-    }).then((result) => {
+    }).then(result => {
       if (result.isConfirmed) {
         window.location.replace('/app/events/browse');
       }
@@ -164,7 +164,6 @@ const UserDetails = ({
               onNext();
             }
           }
-
         } catch (err) {
           console.error(err);
           setStatus({ success: false });
@@ -174,25 +173,25 @@ const UserDetails = ({
       }}
     >
       {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          setFieldValue,
-          isSubmitting,
-          touched,
-          values
-        }) => (
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        isSubmitting,
+        touched,
+        values
+      }) => (
         <form
           onSubmit={handleSubmit}
           className={clsx(classes.root, className)}
           {...rest}
         >
-          <Typography variant='h3' color='textPrimary'>
+          <Typography variant="h3" color="textPrimary">
             Información de la Campaña
           </Typography>
           <Box mt={2}>
-            <Typography variant='subtitle1' color='textSecondary'>
+            <Typography variant="subtitle1" color="textSecondary">
               Información básica de la Campaña
             </Typography>
           </Box>
@@ -201,22 +200,22 @@ const UserDetails = ({
               error={Boolean(touched.projectName && errors.projectName)}
               fullWidth
               helperText={touched.projectName && errors.projectName}
-              label='Nombre de la campaña'
-              name='projectName'
+              label="Nombre de la campaña"
+              name="projectName"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.projectName}
-              variant='outlined'
+              variant="outlined"
             />
 
             <Box mt={3} mb={1}>
-              <Typography variant='subtitle2' color='textSecondary'>
+              <Typography variant="subtitle2" color="textSecondary">
                 Descripción
               </Typography>
             </Box>
-            <Paper variant='outlined'>
+            <Paper variant="outlined">
               <QuillEditor
-                name='description'
+                name="description"
                 className={classes.editor}
                 value={values.description}
                 onBlur={handleDescBlur}
@@ -225,51 +224,51 @@ const UserDetails = ({
                 )}
               />
             </Paper>
-            {(descriptionBlur && !values.description.replace(/<\/?[^>]+(>|$)/g, '')) && (
-              <Box mt={2} className={classes.descError}>
-                <FormHelperText error>
-                  Ingrese una descprición
-                </FormHelperText>
-              </Box>
-            )}
+            {descriptionBlur &&
+              !values.description.replace(/<\/?[^>]+(>|$)/g, '') && (
+                <Box mt={2} className={classes.descError}>
+                  <FormHelperText error>Ingrese una descprición</FormHelperText>
+                </Box>
+              )}
           </Box>
           <Box mt={2}>
             <TextField
               error={Boolean(touched.ubication && errors.ubication)}
               fullWidth
               helperText={touched.ubication && errors.ubication}
-              label='Ubicación'
-              name='ubication'
+              label="Ubicación"
+              name="ubication"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.ubication}
-              variant='outlined'
+              variant="outlined"
             />
           </Box>
-          <Box mt={2} display='flex' alignItems='center'>
+          <Box mt={2} display="flex" alignItems="center">
             <TextField
               error={Boolean(touched.category && errors.category)}
               fullWidth
               select
               helperText={touched.category && errors.category}
-              label='Categoría'
-              name='category'
+              label="Categoría"
+              name="category"
               onBlur={handleBlur}
               onChangeCapture={event => {
                 setCategory((category = parseInt(event.target.value)));
               }}
               onChange={handleChange}
               value={values.category}
-              variant='outlined'
+              variant="outlined"
               SelectProps={{ native: true }}
             >
               <>
-                <option defaultValue=' ' selected />
-                {categoryOption.map(option => (
-                  <option key={option.id} value={option.id}>
-                    {option.name}
-                  </option>
-                ))}
+                <option defaultValue=" " selected />
+                {categoryOption &&
+                  categoryOption.map(option => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
               </>
             </TextField>
           </Box>
@@ -279,19 +278,18 @@ const UserDetails = ({
             </Box>
           )}
           <Ottro />
-          <Box mt={6} display='flex'>
-            <Button onClick={handleConfirmationCancel} size='large'>
+          <Box mt={6} display="flex">
+            <Button onClick={handleConfirmationCancel} size="large">
               Cancelar
             </Button>
 
-
             <Box flexGrow={1} />
             <Button
-              color='secondary'
+              color="secondary"
               disabled={isSubmitting}
-              type='submit'
-              variant='contained'
-              size='large'
+              type="submit"
+              variant="contained"
+              size="large"
             >
               Siguiente
             </Button>
@@ -309,10 +307,8 @@ UserDetails.propTypes = {
 };
 
 UserDetails.defaultProps = {
-  onNext: () => {
-  },
-  onBack: () => {
-  }
+  onNext: () => {},
+  onBack: () => {}
 };
 
 export default UserDetails;

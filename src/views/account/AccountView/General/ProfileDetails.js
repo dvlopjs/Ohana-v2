@@ -37,15 +37,15 @@ const ProfileDetails = ({ className, user, ...rest }) => {
           textAlign="center"
         >
           <Avatar className={classes.avatar} src={avatar} />
-          <Typography
-            className={classes.name}
-            gutterBottom
-            variant="h3"
-          >
-           {user.additional_info.first_name + ' ' + user.additional_info.last_name}
+          <Typography className={classes.name} gutterBottom variant="h3">
+            {user.additional_info
+              ? user.additional_info.first_name +
+                ' ' +
+                user.additional_info.last_name
+              : '--'}
           </Typography>
           <Typography color="textPrimary" variant="body1">
-            {'@'+user.username}
+            {'@' + user.username}
           </Typography>
         </Box>
       </CardContent>

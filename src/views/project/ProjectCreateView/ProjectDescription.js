@@ -24,15 +24,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProjectDescription = ({
-                              eventId,
-                              data,
-                              className,
-                              onBack,
-                              onComplete,
-                              editMode,
-                              updateImage,
-                              ...rest
-                            }) => {
+  eventId,
+  data,
+  className,
+  onBack,
+  onComplete,
+  editMode,
+  updateImage,
+  ...rest
+}) => {
   const classes = useStyles();
   const [isSubmitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -152,38 +152,38 @@ const ProjectDescription = ({
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Typography variant='h3' color='textPrimary'>
+      <Typography variant="h3" color="textPrimary">
         Agregar imagen de la campaña
       </Typography>
       <Box mt={2}>
         <TextField
           fullWidth
-          label='URL de la imagen'
-          name='image'
+          label="URL de la imagen"
+          name="image"
           onChange={handleChange()}
           value={image}
-          variant='outlined'
+          variant="outlined"
         />
       </Box>
 
-      {error && (
+      {/* {error && (
         <Box mt={2}>
           <FormHelperText error>{FormHelperText}</FormHelperText>
         </Box>
-      )}
-      <Box mt={6} display='flex'>
+      )} */}
+      <Box mt={6} display="flex">
         {onBack && (
-          <Button onClick={onBack} size='large'>
+          <Button onClick={onBack} size="large">
             Atrás
           </Button>
         )}
         <Box flexGrow={1} />
         <Button
-          color='secondary'
+          color="secondary"
           disabled={isSubmitting}
-          type='submit'
-          variant='contained'
-          size='large'
+          type="submit"
+          variant="contained"
+          size="large"
         >
           Listo
         </Button>
@@ -199,10 +199,8 @@ ProjectDescription.propTypes = {
 };
 
 ProjectDescription.defaultProps = {
-  onComplete: () => {
-  },
-  onBack: () => {
-  }
+  onComplete: () => {},
+  onBack: () => {}
 };
 
 export default ProjectDescription;
