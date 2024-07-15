@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import api from '../../../../api/Api.js';
-import {
-  Card,
-  CardContent,
-  Typography,
-  useTheme
-} from '@material-ui/core';
+import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
 
 const LineChart = () => {
   const theme = useTheme();
-  const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  let [donations, setDonations] = useState([]);
+  const months = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+  ];
+
+  let [donations, setDonations] = useState(
+    Array(12).fill({ month: 0, donations: 0 })
+  );
 
   useEffect(() => {
     donar();
@@ -20,7 +31,19 @@ const LineChart = () => {
   const donar = async () => {
     try {
       const response = await api.getDonationsByMonth();
-      setDonations(response);
+
+      // Crear un arreglo con todos los meses inicializados a 0
+      const allMonths = months.map((_, index) => ({
+        month: index + 1,
+        donations: 0
+      }));
+
+      // Actualizar el arreglo con los datos reales
+      response.forEach(donation => {
+        allMonths[donation.month - 1].donations = donation.donations;
+      });
+
+      setDonations(allMonths);
     } catch (err) {
       console.error(err);
     }
@@ -38,7 +61,10 @@ const LineChart = () => {
       },
       colors: ['#1f87e6', '#ff5c7c'],
       dataLabels: {
-        enabled: false
+        enabled: true,
+        formatter: function(val) {
+          return Math.round(val);
+        }
       },
       grid: {
         borderColor: theme.palette.divider,
@@ -77,7 +103,12 @@ const LineChart = () => {
         mode: theme.palette.type
       },
       tooltip: {
-        theme: theme.palette.type
+        theme: theme.palette.type,
+        y: {
+          formatter: function(val) {
+            return Math.round(val);
+          }
+        }
       },
       xaxis: {
         axisBorder: {
@@ -87,7 +118,7 @@ const LineChart = () => {
           show: true,
           color: theme.palette.divider
         },
-        categories: donations ? donations.map(d => months[d.month - 1]).reverse() : [],
+        categories: months,
         labels: {
           style: {
             colors: theme.palette.text.secondary
@@ -107,6 +138,9 @@ const LineChart = () => {
           labels: {
             style: {
               colors: theme.palette.text.secondary
+            },
+            formatter: function(val) {
+              return Math.round(val);
             }
           }
         },
@@ -122,6 +156,9 @@ const LineChart = () => {
           labels: {
             style: {
               colors: theme.palette.text.secondary
+            },
+            formatter: function(val) {
+              return Math.round(val);
             }
           },
           opposite: true
@@ -131,29 +168,21 @@ const LineChart = () => {
     series: [
       {
         name: 'Cantidad de donaciones',
-        data: donations ? donations.map(d => d.donations) : []
-        // data: donation
+        data: donations.map(d => d.donations)
       }
     ]
   });
+
   return (
     <Card>
       <CardContent>
-        <Typography
-          variant='h4'
-          color='textPrimary'
-        >
+        <Typography variant="h4" color="textPrimary">
           Mis donaciones
         </Typography>
-        <Chart
-          type='line'
-          height='300'
-          {...chart()}
-        />
+        <Chart type="bar" height="300" {...chart()} />
       </CardContent>
     </Card>
   );
 };
-
 
 export default LineChart;

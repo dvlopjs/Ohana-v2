@@ -220,6 +220,15 @@ class API {
     return data;
   }
 
+  static async getLastDonatedEvents() {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/stats/last-donated-events/`;
+    const { data } = await axiosInstance.get(path, config);
+    return data;
+  }
+
   // Obtener data usuario
   static async getInfoUser() {
     const config = {

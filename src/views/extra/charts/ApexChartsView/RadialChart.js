@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
-import {
-  Card,
-  CardContent,
-  Typography,
-  useTheme
-} from '@material-ui/core';
-
+import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
 
 const RadialChart = () => {
   const theme = useTheme();
@@ -21,7 +15,7 @@ const RadialChart = () => {
         },
         zoom: false
       },
-      colors: ['#FF7514'],
+      colors: [theme.palette.secondary.main],
       labels: ['Campañas'],
       plotOptions: {
         radialBar: {
@@ -50,22 +44,17 @@ const RadialChart = () => {
   };
 
   return (
-    <Card>
+    <Card style={{ height: '100%' }}>
       <CardContent>
-        <Typography
-          align='center'
-          variant='h4'
-          color='textPrimary'
-        >
+        <Typography variant="h4" color="textPrimary">
           Mis campañas finalizadas
         </Typography>
         <Chart
           options={data.options}
           series={data.series}
-          type='radialBar'
-          height='300'
+          type="radialBar"
+          height="300"
         />
-
       </CardContent>
     </Card>
   );

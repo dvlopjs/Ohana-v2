@@ -52,7 +52,7 @@ const sections = [
         href: '/app/reports/dashboard-alternative'
       }*/
       {
-        title: 'Charts',
+        title: 'Estadísticas',
         /*href: '/app/extra/charts',*/
         icon: BarChartIcon,
         href: '/app/extra/charts/apex'
@@ -276,7 +276,6 @@ const sections = [
       }
     ]
   },*/
-
 ];
 
 function renderNavItems({ items, pathname, depth = 0 }) {
@@ -364,32 +363,32 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box height='100%' display='flex' flexDirection='column'>
+    <Box height="100%" display="flex" flexDirection="column">
       <PerfectScrollbar options={{ suppressScrollX: true }}>
         <Hidden lgUp>
-          <Box p={2} display='flex' justifyContent='center'>
-            <RouterLink to='/'>
+          <Box p={2} display="flex" justifyContent="center">
+            <RouterLink to="/">
               <Logo />
             </RouterLink>
           </Box>
         </Hidden>
         <Box p={2}>
-          <Box display='flex' justifyContent='center'>
-            <RouterLink to='/app/account'>
-              <Avatar alt='User' className={classes.avatar} src={user.avatar} />
+          <Box display="flex" justifyContent="center">
+            <RouterLink to="/app/account">
+              <Avatar alt="User" className={classes.avatar} src={user.avatar} />
             </RouterLink>
           </Box>
-          <Box mt={2} textAlign='center'>
+          <Box mt={2} textAlign="center">
             <Link
               component={RouterLink}
-              to='/app/account'
-              variant='h5'
-              color='textPrimary'
-              underline='none'
+              to="/app/account"
+              variant="h5"
+              color="textPrimary"
+              underline="none"
             >
               {user.name}
             </Link>
-            <Typography variant='body2' color='textSecondary'></Typography>
+            <Typography variant="body2" color="textSecondary"></Typography>
           </Box>
         </Box>
         <Divider />
@@ -412,17 +411,17 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </Box>
         <Divider />
         <Box p={2}>
-          <Box p={2} borderRadius='borderRadius' bgcolor='background.dark'>
-            <Typography variant='h5' color='textPrimary'>
+          <Box p={2} borderRadius="borderRadius" bgcolor="background.dark">
+            <Typography variant="h5" color="textPrimary">
               Necesita ayuda?
             </Typography>
             <Link
-              variant='subtitle1'
-              color='secondary'
+              variant="subtitle1"
+              color="secondary"
               component={RouterLink}
-              to='/docs'
+              to="/docs"
             >
-              <Typography variant='body2' color='primary'>
+              <Typography variant="body2" color="primary">
                 Mire nuestra documentación
               </Typography>
             </Link>
@@ -436,21 +435,21 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     <>
       <Hidden lgUp>
         <Drawer
-          anchor='left'
+          anchor="left"
           classes={{ paper: classes.mobileDrawer }}
           onClose={onMobileClose}
           open={openMobile}
-          variant='temporary'
+          variant="temporary"
         >
           {content}
         </Drawer>
       </Hidden>
       <Hidden mdDown>
         <Drawer
-          anchor='left'
+          anchor="left"
           classes={{ paper: classes.desktopDrawer }}
           open
-          variant='persistent'
+          variant="persistent"
         >
           {content}
         </Drawer>

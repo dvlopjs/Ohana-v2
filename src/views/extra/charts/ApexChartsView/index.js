@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
@@ -11,11 +11,13 @@ import {
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Page from 'src/components/Page';
-import AreaChart from './AreaChart';
 import LineChart from './LineChart';
 import RadialChart from './RadialChart';
+import api from '../../../../api/Api.js';
+import TopProjects from './TopProjects';
+import { useGetLastDonations } from './useGetLastDonations';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
@@ -26,71 +28,48 @@ const useStyles = makeStyles((theme) => ({
 
 const ApexChartsView = () => {
   const classes = useStyles();
+
   return (
-    <Page
-      className={classes.root}
-      title='Estadísticas'
-    >
-      <Container maxWidth='lg'>
+    <Page className={classes.root} title="Estadísticas">
+      <Container maxWidth="lg">
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize='small' />}
-          aria-label='breadcrumb'
+          separator={<NavigateNextIcon fontSize="small" />}
+          aria-label="breadcrumb"
         >
           <Link
-            variant='body1'
-            color='inherit'
-            to='/app'
+            variant="body1"
+            color="inherit"
+            to="/app"
             component={RouterLink}
           >
             Dashboard
           </Link>
-          <Link
-            variant='body1'
-            color='inherit'
-            to='/app/extra'
-            component={RouterLink}
-          >
-            Extra
-          </Link>
-          <Typography
-            variant='body1'
-            color='textPrimary'
-          >
+
+          <Typography variant="body1" color="textPrimary">
             Gráficos
           </Typography>
         </Breadcrumbs>
-        <Typography
-          variant='h3'
-          color='textPrimary'
-        >
+        <Typography variant="h3" color="textPrimary">
           Estadísticas
         </Typography>
-        <Box mt={3}
-        >
-          <Grid
-            container
-            spacing={4}
-          >
-            <Grid
-              xs={12}
-              md={8}
-            >
-
-              <LineChart />
+        <Box mt={3}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={8}>
+              <Box height="100%">
+                <LineChart />
+              </Box>
             </Grid>
-            {/* <Grid
-              item
-              xs={12}
-              md={8}
-            >
-              <AreaChart />
-            </Grid>*/}
-            <Grid
-              item
-              xs={12}
-              md={4}
-            >
-              <RadialChart />
+            <Grid item xs={12} md={4}>
+              <Box height="100%">
+                <RadialChart />
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box mt={4}>
+          <Grid container>
+            <Grid item xs={12}>
+              <TopProjects />
             </Grid>
           </Grid>
         </Box>
