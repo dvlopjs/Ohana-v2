@@ -15,6 +15,7 @@ import LineChart from './LineChart';
 import RadialChart from './RadialChart';
 import api from '../../../../api/Api.js';
 import TopProjects from './TopProjects';
+import StaticsTop from './StaticsTop/StaticsTop';
 import { useGetLastDonations } from './useGetLastDonations';
 
 const useStyles = makeStyles(theme => ({
@@ -27,6 +28,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ApexChartsView = () => {
+  const [valueSwitch, setValueSwitch] = useState(false);
+  const {
+    lastDonations,
+    totalQuantityDonations,
+    totalDonated
+  } = useGetLastDonations({
+    valueSwitch: valueSwitch
+  });
+
+  console.log(totalDonated);
   const classes = useStyles();
 
   return (
@@ -52,6 +63,14 @@ const ApexChartsView = () => {
         <Typography variant="h3" color="textPrimary">
           Estadísticas
         </Typography>
+
+        <Box mt={3}>
+          <StaticsTop
+            lastDonations={lastDonations}
+            totalQuantityDonations={totalQuantityDonations}
+            totalDonated={totalDonated}
+          />
+        </Box>
         <Box mt={3}>
           <Grid container spacing={4}>
             <Grid item xs={12} md={8}>

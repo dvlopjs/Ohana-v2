@@ -13,7 +13,6 @@ export const useGetLastDonations = ({ valueSwitch }) => {
         : response.sort(
             (a, b) => b.total_donated_amount - a.total_donated_amount
           );
-
       setLastDonations(sortedData);
     } catch (err) {
       console.error(err);
@@ -23,9 +22,16 @@ export const useGetLastDonations = ({ valueSwitch }) => {
   const totalDonated = lastDonations.reduce(
     (accumulator, currentValue) =>
       accumulator + currentValue.total_donated_amount,
+
     0
   );
 
+  const totalQuantityDonations = lastDonations.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.donations,
+    0
+  );
+
+  const totalDonatedFormatted = totalDonated.toLocaleString('es-AR');
   useEffect(() => {
     handleGetLastDonations();
   }, [valueSwitch]);
@@ -33,6 +39,7 @@ export const useGetLastDonations = ({ valueSwitch }) => {
   return {
     lastDonations,
     handleGetLastDonations,
-    totalDonated
+    totalDonated: totalDonatedFormatted,
+    totalQuantityDonations
   };
 };

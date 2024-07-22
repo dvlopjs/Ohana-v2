@@ -42,7 +42,7 @@ const sections = [
         href: '/app/projects/create'
       },
       {
-        title: 'Mis Campañas',
+        title: 'Mis campañas',
         icon: Navigation,
         href: '/app/reports/dashboard'
       },

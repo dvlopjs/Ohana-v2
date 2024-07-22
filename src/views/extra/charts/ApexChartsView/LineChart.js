@@ -59,7 +59,7 @@ const LineChart = () => {
         },
         zoom: false
       },
-      colors: ['#1f87e6', '#ff5c7c'],
+      colors: [theme.palette.secondary.main],
       dataLabels: {
         enabled: true,
         formatter: function(val) {
