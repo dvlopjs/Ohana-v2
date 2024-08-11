@@ -47,7 +47,7 @@ const RadialChart = () => {
     <Card style={{ height: '100%' }}>
       <CardContent>
         <Typography variant="h4" color="textPrimary">
-          Mis campañas finalizadas
+          Mis campañas finalizadas ✅
         </Typography>
         <Chart
           options={data.options}

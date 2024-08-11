@@ -177,7 +177,7 @@ const LineChart = () => {
     <Card>
       <CardContent>
         <Typography variant="h4" color="textPrimary">
-          Mis donaciones
+          Mis donaciones 💝
         </Typography>
         <Chart type="bar" height="300" {...chart()} />
       </CardContent>

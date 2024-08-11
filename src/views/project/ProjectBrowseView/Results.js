@@ -62,59 +62,58 @@ const Results = ({ className, projects, fetchEvent, ...rest }) => {
     return pageSize;
   };
 
-  return (
-    !!projects.results && projects.results.length === 0 ? (
-        <Card>
-          <NoResults title={'No se encontraron resultados'} />
-        </Card>
-      ) :
-      (!!projects.results && (
-        <div className={clsx(classes.root, className)} {...rest}>
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-            flexWrap='wrap'
-            mb={2}
+  return !!projects.results && projects.results.length === 0 ? (
+    <Card>
+      <NoResults title={'No se encontraron resultados'} />
+    </Card>
+  ) : (
+    !!projects.results && (
+      <div className={clsx(classes.root, className)} {...rest}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          flexWrap="wrap"
+          mb={2}
+        >
+          <Typography
+            className={classes.title}
+            variant="h5"
+            color="textPrimary"
           >
-            <Typography
-              className={classes.title}
-              variant='h5'
-              color='textPrimary'
+            Campañas
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <ToggleButtonGroup
+              exclusive
+              onChange={handleModeChange}
+              size="small"
+              value={mode}
             >
-              Campañas
-            </Typography>
-            <Box display='flex' alignItems='center'>
-              <ToggleButtonGroup
-                exclusive
-                onChange={handleModeChange}
-                size='small'
-                value={mode}
-              >
-                <ToggleButton value='grid'>
-                  <ViewModuleIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
+              <ToggleButton value="grid">
+                <ViewModuleIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Box>
-          <Grid container spacing={3}>
-            {projects.results.map(project => (
-              <Grid
-                item
-                key={project.id}
-                md={mode === 'grid' ? 4 : 12}
-                sm={mode === 'grid' ? 6 : 12}
-                xs={12}
-              >
-                <CardEvents project={project} userMode={false} />
-              </Grid>
-            ))}
-          </Grid>
-          <Box mt={6} display='flex' justifyContent='center'>
-            <Pagination count={getPageSize()} onChange={handleChange} />
-          </Box>
-        </div>
-      ))
+        </Box>
+        <Grid container spacing={3}>
+          {projects.results.map(project => (
+            <Grid
+              item
+              key={project.id}
+              md={mode === 'grid' ? 4 : 12}
+              sm={mode === 'grid' ? 6 : 12}
+              xs={12}
+            >
+              <CardEvents project={project} userMode={false} />
+            </Grid>
+          ))}
+        </Grid>
+        <Box mt={6} display="flex" justifyContent="center">
+          <Pagination count={getPageSize()} onChange={handleChange} />
+        </Box>
+      </div>
+    )
   );
 };
 

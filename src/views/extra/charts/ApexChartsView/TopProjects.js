@@ -81,7 +81,7 @@ const TopProjects = () => {
         <CardContent>
           <Box display={'flex'} justifyContent={'space-between'}>
             <Typography color="textPrimary" variant="h4">
-              Las campañas mas destacadas
+              Las campañas mas destacadas ⭐
             </Typography>
             <SwitchDoubleLabel
               value={valueSwitch}

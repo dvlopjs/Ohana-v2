@@ -51,14 +51,18 @@ const ProjectBrowseView = () => {
   };
 
   return (
-    <Page className={classes.root} title='Explorar campañas | Ohana'>
-      <Container maxWidth='lg'>
+    <Page className={classes.root} title="Explorar campañas | Ohana">
+      <Container maxWidth="lg">
         <Header />
         <Box mt={3}>
           <Filter fetchEvent={fetchEvent} />
         </Box>
         {!!loading ? (
-          <CircularProgress className={classes.progress} color='primary' size={50} />
+          <CircularProgress
+            className={classes.progress}
+            color="primary"
+            size={50}
+          />
         ) : (
           <Box mt={4}>
             <Results projects={events} fetchEvent={fetchEvent} />

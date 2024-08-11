@@ -42,16 +42,14 @@ const Filter = ({ className, onlyName, fetchEvent, ...rest }) => {
         label: 'Categoría',
         options: categoriesNames
       }
-    ])
+    ]);
   }, [categoriesNames]);
 
-  const fetchCategories = async() => {
+  const fetchCategories = async () => {
     let catNames = [];
     try {
       let response = await api.getCategories();
-      response.map((category) => 
-        catNames.push(category.name)
-      )
+      response.map(category => catNames.push(category.name));
       setCategoriesNames(catNames);
     } catch (e) {
       console.error(e);
@@ -99,7 +97,7 @@ const Filter = ({ className, onlyName, fetchEvent, ...rest }) => {
           value={inputValue}
         />
       </Box>
-      { !onlyName && (
+      {!onlyName && (
         <div>
           <Divider />
           <Box p={2} display="flex" alignItems="center" flexWrap="wrap">
