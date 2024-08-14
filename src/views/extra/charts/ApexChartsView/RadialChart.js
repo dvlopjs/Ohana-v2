@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Chart from 'react-apexcharts';
-import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
-
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  useTheme
+} from '@material-ui/core';
+import { useGetCompaniesEnded } from './hooks/useGetCompaniesEnded';
+import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 const RadialChart = () => {
   const theme = useTheme();
+  const { companiesEnded } = useGetCompaniesEnded();
 
   const data = {
     options: {
@@ -40,7 +48,7 @@ const RadialChart = () => {
         mode: theme.palette.type
       }
     },
-    series: [83]
+    series: [companiesEnded.percentage_finished]
   };
 
   return (
@@ -49,12 +57,27 @@ const RadialChart = () => {
         <Typography variant="h4" color="textPrimary">
           Mis campañas finalizadas ✅
         </Typography>
+
         <Chart
           options={data.options}
           series={data.series}
           type="radialBar"
-          height="300"
+          height="200"
         />
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems={'center'}
+          alignContent={'center'}
+        >
+          <Typography variant="subtitle1" color="textSecondary">
+            ✦ Total de campañas: <span>{companiesEnded.total_events}</span>
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            ✦ Campañas completadas:{' '}
+            <span> {companiesEnded.finished_events}</span>
+          </Typography>
+        </Box>
       </CardContent>
     </Card>
   );

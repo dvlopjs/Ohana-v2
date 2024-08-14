@@ -14,16 +14,6 @@ export const useGetCompaniesSuscribed = () => {
     }
   };
 
-  const handleUwu = async () => {
-    try {
-      const response = await api.getTotalCompaniesSuscribed();
-
-      setCompaniesSuscribed(response.events);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     handleGetTotalCompaniesSuscribed();
   }, []);

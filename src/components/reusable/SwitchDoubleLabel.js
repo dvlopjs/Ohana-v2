@@ -4,7 +4,7 @@ export const SwitchDoubleLabel = ({ value, labels, handleChange, isXs }) => {
   return (
     <Typography component="div">
       <Grid component="label" container alignItems="center" spacing={1}>
-        <Grid item style={{ fontSize: isXs ? '0.7rem' : '1rem' }}>
+        <Grid item style={{ fontSize: isXs ? '0.8rem' : '1rem' }}>
           {labels.label1}
         </Grid>
         <Grid item>
@@ -15,7 +15,7 @@ export const SwitchDoubleLabel = ({ value, labels, handleChange, isXs }) => {
             size="small"
           />
         </Grid>
-        <Grid item style={{ fontSize: isXs ? '0.7rem' : '1rem' }}>
+        <Grid item style={{ fontSize: isXs ? '0.8rem' : '1rem' }}>
           {labels.label2}
         </Grid>
       </Grid>
