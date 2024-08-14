@@ -12,7 +12,7 @@ import {
   Typography
 } from '@material-ui/core';
 import useAuth from 'src/hooks/useAuth';
-import avatar from '../../../assets/avatar.png'
+import avatar from '../../../assets/avatar.png';
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -34,7 +34,7 @@ const Account = () => {
   const [isOpen, setOpen] = useState(false);
 
   const user = {
-    name:  localStorage.getItem('username'),
+    name: localStorage.getItem('username'),
     avatar: avatar
   };
 
@@ -62,15 +62,15 @@ const Account = () => {
   return (
     <>
       <Box
-        display='flex'
-        alignItems='center'
+        display="flex"
+        alignItems="center"
         component={ButtonBase}
         onClick={handleOpen}
         ref={ref}
       >
-        <Avatar alt='User' className={classes.avatar} src={user.avatar} />
+        <Avatar alt="User" className={classes.avatar} src={user.avatar} />
         <Hidden smDown>
-          <Typography variant='h6' color='primary'>
+          <Typography variant="h6" color="primary">
             {user.name}
           </Typography>
         </Hidden>
@@ -87,10 +87,7 @@ const Account = () => {
         anchorEl={ref.current}
         open={isOpen}
       >
-        <MenuItem component={RouterLink} to='/app/social/profile'>
-          Perfil
-        </MenuItem>
-        <MenuItem component={RouterLink} to='/app/account'>
+        <MenuItem component={RouterLink} to="/app/account">
           Mi cuenta
         </MenuItem>
         <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>

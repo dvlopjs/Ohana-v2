@@ -8,7 +8,6 @@ import {
   useTheme
 } from '@material-ui/core';
 import { useGetCompaniesEnded } from './hooks/useGetCompaniesEnded';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 const RadialChart = () => {
   const theme = useTheme();
   const { companiesEnded } = useGetCompaniesEnded();

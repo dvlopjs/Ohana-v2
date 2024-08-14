@@ -10,9 +10,10 @@ import CardStaticsTop from './CardStaticsTop';
 import { CardContentStatics } from './CardContentStatics';
 import { useGetTotalDonations } from '../hooks/useGetTotalDonations';
 import { useGetCompaniesSuscribed } from '../hooks/useGetCompaniesSuscribed';
+import { is } from 'immutable';
 
 const StaticsTop = ({ totalDonated }) => {
-  const { totalDonations } = useGetTotalDonations();
+  const { totalDonations, isLoading } = useGetTotalDonations();
   const { companiesSuscribe } = useGetCompaniesSuscribed();
   return (
     <Grid container spacing={3}>
@@ -22,6 +23,7 @@ const StaticsTop = ({ totalDonated }) => {
             icon={<HeartIcon color="#5465D1" />}
             data={totalDonations}
             text={'Cant. total de donaciones'}
+            isLoading={isLoading}
           />
         </CardStaticsTop>
       </Grid>
@@ -32,6 +34,7 @@ const StaticsTop = ({ totalDonated }) => {
             icon={<LocalAtmIcon style={{ color: '#5465D1' }} />}
             data={`$ ${totalDonated}`}
             text={'Monto total de donaciones'}
+            isLoading={isLoading}
           />
         </CardStaticsTop>
       </Grid>
@@ -42,6 +45,7 @@ const StaticsTop = ({ totalDonated }) => {
             icon={<BellIcon color="#5465D1" />}
             data={companiesSuscribe}
             text={'Campañas activas'}
+            isLoading={isLoading}
           />
         </CardStaticsTop>
       </Grid>
