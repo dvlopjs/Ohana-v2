@@ -5,12 +5,12 @@ import {
   CardContent,
   Typography,
   makeStyles,
+  useMediaQuery,
   useTheme
 } from '@material-ui/core';
 import Chart from 'react-apexcharts';
 
 import { SwitchDoubleLabel } from 'src/components/reusable/SwitchDoubleLabel.js';
-import { useGetLastDonations } from './hooks/useGetLastDonations.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,10 +21,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TopProjects = () => {
+const TopProjects = ({ lastDonations }) => {
   const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down('xs'));
+
+  console.log(isXs);
   const [valueSwitch, setValueSwitch] = useState(false);
-  const { lastDonations } = useGetLastDonations({ valueSwitch: valueSwitch });
 
   const handleChangeSwitch = e => {
     setValueSwitch(e.target.checked);
@@ -33,8 +35,8 @@ const TopProjects = () => {
   //   CHART DATA
   const companies = lastDonations.map(item => item.title);
   const quantityDonations = lastDonations.map(item => item.donations);
-  const totalAmountDonations = lastDonations.map(
-    item => item.total_donated_amount
+  const totalAmountDonations = lastDonations.map(item =>
+    Number(item.total_donated_amount)
   );
 
   const data = {
@@ -48,8 +50,8 @@ const TopProjects = () => {
       },
       labels: companies,
       colors: [
-        '#5D8FCD', //Secondary
         '#6A7FDB', //Primary
+        '#5D8FCD', //Secondary
         '#9C98CE', //Tercero
         '#A3C4F3',
         '#7583B7',
@@ -60,8 +62,15 @@ const TopProjects = () => {
         '#D6E0F0'
       ],
       dataLabels: {
-        enabled: true,
-        formatter: val => `${val.toFixed(1)}%` // Formato de etiquetas en porcentaje
+        enabled: true
+      },
+      tooltip: {
+        y: {
+          formatter: val => {
+            const msjVal = val === 1 ? 'Donación' : 'Donaciones';
+            return !valueSwitch ? `${val} ${msjVal}` : `$${val.toFixed(2)}`;
+          }
+        }
       },
       legend: {
         position: 'bottom'
@@ -79,25 +88,47 @@ const TopProjects = () => {
     <>
       <Card>
         <CardContent>
-          <Box display={'flex'} justifyContent={'space-between'}>
-            <Typography color="textPrimary" variant="h4">
-              Mis últimas donaciones ⭐
-            </Typography>
-            <SwitchDoubleLabel
-              value={valueSwitch}
-              labels={{
-                label1: 'Cantidad',
-                label2: 'Monto'
-              }}
-              handleChange={handleChangeSwitch}
-            />
-          </Box>
+          {!isXs ? (
+            <Box display={'flex'} justifyContent={'space-between'}>
+              <Typography color="textPrimary" variant="h4">
+                Mis últimas donaciones ⭐
+              </Typography>
+
+              <SwitchDoubleLabel
+                value={valueSwitch}
+                labels={{
+                  label1: 'Cantidad',
+                  label2: 'Monto'
+                }}
+                handleChange={handleChangeSwitch}
+                isXs={isXs}
+              />
+            </Box>
+          ) : (
+            <Box display={'flex'} flexDirection={'column'}>
+              <Typography color="textPrimary" variant="h4">
+                Mis últimas donaciones ⭐
+              </Typography>
+
+              <Box pt={1}>
+                <SwitchDoubleLabel
+                  value={valueSwitch}
+                  labels={{
+                    label1: 'Cantidad',
+                    label2: 'Monto'
+                  }}
+                  handleChange={handleChangeSwitch}
+                  isXs={isXs}
+                />
+              </Box>
+            </Box>
+          )}
 
           <Chart
             options={data.options}
             series={data.series}
             type="pie" // Cambiado a 'pie' para el gráfico de torta
-            height="400"
+            height={isXs ? '250' : '400'}
           />
         </CardContent>
       </Card>

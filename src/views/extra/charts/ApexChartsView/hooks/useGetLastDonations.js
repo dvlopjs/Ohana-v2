@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import api from '../../../../../api/Api.js';
 
-export const useGetLastDonations = ({ valueSwitch }) => {
+export const useGetLastDonations = () => {
   const [lastDonations, setLastDonations] = useState([]);
 
   const handleGetLastDonations = async () => {
     try {
       const response = await api.getLastDonatedEvents();
 
-      const sortedData = !valueSwitch
-        ? response.sort((a, b) => b.donations - a.donations)
-        : response.sort(
-            (a, b) => b.total_donated_amount - a.total_donated_amount
-          );
-      setLastDonations(sortedData);
+      setLastDonations(response);
     } catch (err) {
       console.error(err);
     }
@@ -33,7 +28,7 @@ export const useGetLastDonations = ({ valueSwitch }) => {
   const totalDonatedFormatted = totalDonated.toLocaleString('es-AR');
   useEffect(() => {
     handleGetLastDonations();
-  }, [valueSwitch]);
+  }, []);
 
   return {
     lastDonations,

@@ -7,8 +7,6 @@ export const useGetTotalDonations = () => {
   const getTotalOfDonations = async () => {
     try {
       const response = await api.getTotalDonations();
-      console.log(response);
-      // setTotalDonations(response.data.totalDonations);
       setTotalDonations(response.donations);
     } catch (error) {
       console.error(error);

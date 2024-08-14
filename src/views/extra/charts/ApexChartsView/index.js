@@ -32,9 +32,7 @@ const ApexChartsView = () => {
     lastDonations,
     totalQuantityDonations,
     totalDonated
-  } = useGetLastDonations({
-    valueSwitch: valueSwitch
-  });
+  } = useGetLastDonations();
 
   const classes = useStyles();
 
@@ -86,7 +84,7 @@ const ApexChartsView = () => {
         <Box mt={4}>
           <Grid container>
             <Grid item xs={12}>
-              <TopProjects />
+              <TopProjects lastDonations={lastDonations} />
             </Grid>
           </Grid>
         </Box>
