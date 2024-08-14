@@ -8,15 +8,19 @@ import {
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import CardStaticsTop from './CardStaticsTop';
 import { CardContentStatics } from './CardContentStatics';
+import { useGetTotalDonations } from '../hooks/useGetTotalDonations';
+import { useGetCompaniesSuscribed } from '../hooks/useGetCompaniesSuscribed';
 
-const StaticsTop = ({ totalQuantityDonations, totalDonated }) => {
+const StaticsTop = ({ totalDonated }) => {
+  const { totalDonations } = useGetTotalDonations();
+  const { companiesSuscribe } = useGetCompaniesSuscribed();
   return (
     <Grid container spacing={3}>
       <Grid item md={4} sm={4} xs={12}>
         <CardStaticsTop>
           <CardContentStatics
             icon={<HeartIcon color="#5465D1" />}
-            data={totalQuantityDonations}
+            data={totalDonations}
             text={'Cant. total de donaciones'}
           />
         </CardStaticsTop>
@@ -36,7 +40,7 @@ const StaticsTop = ({ totalQuantityDonations, totalDonated }) => {
         <CardStaticsTop>
           <CardContentStatics
             icon={<BellIcon color="#5465D1" />}
-            data={0}
+            data={companiesSuscribe}
             text={'Campañas activas'}
           />
         </CardStaticsTop>

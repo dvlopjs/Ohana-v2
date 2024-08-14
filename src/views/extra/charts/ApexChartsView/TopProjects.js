@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
-
 import {
   Box,
   Card,
   CardContent,
-  Grid,
-  Switch,
   Typography,
   makeStyles,
   useTheme
 } from '@material-ui/core';
 import Chart from 'react-apexcharts';
 
-import api from '../../../../api/Api.js';
 import { SwitchDoubleLabel } from 'src/components/reusable/SwitchDoubleLabel.js';
-import { useGetLastDonations } from './useGetLastDonations.js';
+import { useGetLastDonations } from './hooks/useGetLastDonations.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,35 +40,39 @@ const TopProjects = () => {
   const data = {
     options: {
       chart: {
-        type: 'bar',
+        type: 'pie',
         background: theme.palette.background.paper,
         toolbar: {
           show: false
         }
       },
-      plotOptions: {
-        bar: {
-          horizontal: true
-        }
-      },
-      colors: [theme.palette.secondary.main],
+      labels: companies,
+      colors: [
+        '#5D8FCD', //Secondary
+        '#6A7FDB', //Primary
+        '#9C98CE', //Tercero
+        '#A3C4F3',
+        '#7583B7',
+        '#8FA2C9',
+        '#606E96',
+        '#424C63',
+        '#767A8D',
+        '#D6E0F0'
+      ],
       dataLabels: {
-        enabled: false
+        enabled: true,
+        formatter: val => `${val.toFixed(1)}%` // Formato de etiquetas en porcentaje
       },
-      xaxis: {
-        categories: companies
+      legend: {
+        position: 'bottom'
       },
       theme: {
         mode: theme.palette.type
       }
     },
-    series: [
-      {
-        name: !valueSwitch ? 'Donaciones' : 'Total',
-        data: !valueSwitch ? quantityDonations : totalAmountDonations
-      }
-    ]
+    series: !valueSwitch ? quantityDonations : totalAmountDonations // Datos de las porciones
   };
+
   const classes = useStyles();
 
   return (
@@ -81,7 +81,7 @@ const TopProjects = () => {
         <CardContent>
           <Box display={'flex'} justifyContent={'space-between'}>
             <Typography color="textPrimary" variant="h4">
-              Las campañas mas destacadas ⭐
+              Mis últimas donaciones ⭐
             </Typography>
             <SwitchDoubleLabel
               value={valueSwitch}
@@ -96,7 +96,7 @@ const TopProjects = () => {
           <Chart
             options={data.options}
             series={data.series}
-            type="bar"
+            type="pie" // Cambiado a 'pie' para el gráfico de torta
             height="400"
           />
         </CardContent>

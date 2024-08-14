@@ -248,6 +248,36 @@ class API {
     const { data } = await axiosInstance.put(path, form, config);
     return data;
   }
+
+  // Obtener el total de donaciones
+  static async getTotalDonations() {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/stats/donations-count/`;
+    const { data } = await axiosInstance.get(path, config);
+    return data;
+  }
+
+  // Obtener el total de campañas suscriptas
+  static async getTotalCompaniesSuscribed() {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/stats/active-events-count/`;
+    const { data } = await axiosInstance.get(path, config);
+    return data;
+  }
+
+  // Obtener el total de campañas suscriptas
+  static async getCompaniesEnded() {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/stats/percentage-finished/`;
+    const { data } = await axiosInstance.get(path, config);
+    return data;
+  }
 }
 
 export default API;

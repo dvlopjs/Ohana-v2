@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../../../../api/Api.js';
+import api from '../../../../../api/Api.js';
 
 export const useGetLastDonations = ({ valueSwitch }) => {
   const [lastDonations, setLastDonations] = useState([]);
@@ -21,8 +21,7 @@ export const useGetLastDonations = ({ valueSwitch }) => {
 
   const totalDonated = lastDonations.reduce(
     (accumulator, currentValue) =>
-      accumulator + currentValue.total_donated_amount,
-
+      accumulator + Number(currentValue.total_donated_amount),
     0
   );
 
@@ -39,7 +38,7 @@ export const useGetLastDonations = ({ valueSwitch }) => {
   return {
     lastDonations,
     handleGetLastDonations,
-    totalDonated: totalDonatedFormatted,
+    totalDonated: Number(totalDonatedFormatted).toFixed(2),
     totalQuantityDonations
   };
 };

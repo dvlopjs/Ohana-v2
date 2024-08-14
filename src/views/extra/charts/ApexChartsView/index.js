@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
@@ -13,10 +13,9 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Page from 'src/components/Page';
 import LineChart from './LineChart';
 import RadialChart from './RadialChart';
-import api from '../../../../api/Api.js';
 import TopProjects from './TopProjects';
 import StaticsTop from './StaticsTop/StaticsTop';
-import { useGetLastDonations } from './useGetLastDonations';
+import { useGetLastDonations } from './hooks/useGetLastDonations';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,7 +36,6 @@ const ApexChartsView = () => {
     valueSwitch: valueSwitch
   });
 
-  console.log(totalDonated);
   const classes = useStyles();
 
   return (
