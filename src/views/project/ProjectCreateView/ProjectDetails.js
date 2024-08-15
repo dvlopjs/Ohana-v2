@@ -15,8 +15,8 @@ import {
   Typography
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
-import { Plus as PlusIcon } from 'react-feather';
 import dateFnsFormat from 'date-fns/format';
+import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -52,6 +52,25 @@ const ProjectDetails = ({
   const [formValues, setFormValues] = useState(null);
   const objetiveOption = ['Monetario', 'Bienes'];
 
+  const donationItems = [
+    'Ropa de invierno',
+    'Medicamentos básicos',
+    'Alimentos no perecederos',
+    'Agua embotellada',
+    'Mantas',
+    'Kits de higiene',
+    'Juguetes',
+    'Ropa para niños',
+    'Productos de limpieza',
+    'Pañales',
+    'Artículos escolares',
+    'Calzado',
+    'Sacos de dormir',
+    'Sillas de ruedas',
+    'Productos de bebé',
+    'Alimentos para mascotas'
+  ];
+
   useEffect(() => {
     if (objetives === 'Monetario') {
       setShowTextObjetives(true);
@@ -61,6 +80,7 @@ const ProjectDetails = ({
   const initialValues = {
     typeOfObjective: '',
     money: '',
+    bienes: [],
     startDate: new Date(),
     endDate: new Date(),
     descriptionOfObjective: 0
@@ -71,6 +91,7 @@ const ProjectDetails = ({
       const loadValues = {
         typeOfObjective: event.event_type.id === 1 ? 'Monetario' : 'Bienes',
         money: event.goal,
+        // bienes:event.bienes,
         startDate: event.init_date,
         endDate: event.end_date,
         descriptionOfObjective: 0
@@ -100,6 +121,7 @@ const ProjectDetails = ({
       ...data,
       event_type: values.typeOfObjective === 'Monetario' ? 1 : 0,
       goal: !!event ? event.goal : parseInt(values.money),
+      bienes: !!event ? event.bienes : values.bienes,
       startDate: onDateChange(values.startDate) || event.init_date,
       endDate: onDateChange(values.endDate) || event.end_date
     });
@@ -123,7 +145,16 @@ const ProjectDetails = ({
         ),
         money: Yup.number()
           .max(100000000)
-          .required('Ingrese un monto de dinero')
+          .when('typeOfObjective', {
+            is: 'Monetario',
+            then: Yup.number().required('Ingrese un monto de dinero'),
+            otherwise: Yup.number().notRequired()
+          }),
+        bienes: Yup.array().when('typeOfObjective', {
+          is: 'Bienes',
+          then: Yup.array().required('Ingrese al menos un bien'),
+          otherwise: Yup.array().notRequired()
+        })
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
@@ -133,6 +164,7 @@ const ProjectDetails = ({
           setStatus({ success: true });
           setSubmitting(false);
           arrangeData(values);
+
           if (onNext) {
             onNext();
           }
@@ -195,26 +227,63 @@ const ProjectDetails = ({
                 </>
               </TextField>
             </Box>
-            <Box display="flex" alignItems="center">
-              <TextField
-                error={Boolean(touched.money && errors.money)}
-                fullWidth
-                onKeyPress={event => {
-                  if (!/[0-9,]/.test(event.key)) {
-                    event.preventDefault();
-                  }
+
+            {values.typeOfObjective === 'Bienes' ? (
+              <Autocomplete
+                multiple
+                id="tags-filled"
+                options={donationItems.map(option => option)}
+                freeSolo
+                name="bienes"
+                value={values.bienes}
+                onChange={(event, newValue) => {
+                  setFieldValue('bienes', newValue);
                 }}
-                type="number"
-                helperText={touched.money && errors.money}
-                label="Monto"
-                name="money"
-                onBlur={handleBlur}
-                disabled={!!editMode}
-                onChange={handleChange}
-                value={values.money}
-                variant="outlined"
+                onBlur={() => setFieldTouched('bienes', true)}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => {
+                    const { key, ...tagProps } = getTagProps({ index });
+                    return (
+                      <Box pt={1} pb={1} key={key}>
+                        <Chip variant="outlined" label={option} {...tagProps} />
+                      </Box>
+                    );
+                  })
+                }
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="filled"
+                    label="Bienes"
+                    error={Boolean(touched.bienes && errors.bienes)}
+                    helperText={touched.bienes && errors.bienes}
+                    placeholder="Introducir bienes a donar"
+                  />
+                )}
               />
-            </Box>
+            ) : (
+              <Box display="flex" alignItems="center">
+                <TextField
+                  error={Boolean(touched.money && errors.money)}
+                  fullWidth
+                  onKeyPress={event => {
+                    if (!/[0-9,]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  type="number"
+                  helperText={touched.money && errors.money}
+                  label="Monto"
+                  name="money"
+                  onBlur={handleBlur}
+                  disabled={!!editMode}
+                  onChange={handleChange}
+                  value={values.money}
+                  variant="outlined"
+                />
+              </Box>
+            )}
+
             <Box mt={4} display="flex">
               <DatePicker
                 className={classes.datePicker}
