@@ -5,9 +5,7 @@ import {
   Breadcrumbs,
   Container,
   Typography,
-  colors,
   makeStyles,
-  withStyles,
   LinearProgress,
   Card
 } from '@material-ui/core';
@@ -64,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Donate = ({ match, history }) => {
+const Donate = ({ match }) => {
   const classes = useStyles();
   const [event, setEvent] = useState();
   const [notAllow, setNotAllow] = useState(false);
@@ -81,7 +79,7 @@ const Donate = ({ match, history }) => {
   }, []);
 
   const handleBack = () => {
-    history.goBack();
+    window.history.back();
   };
 
   const createDonation = async () => {

@@ -10,7 +10,6 @@ import CardStaticsTop from './CardStaticsTop';
 import { CardContentStatics } from './CardContentStatics';
 import { useGetTotalDonations } from '../hooks/useGetTotalDonations';
 import { useGetCompaniesSuscribed } from '../hooks/useGetCompaniesSuscribed';
-import { is } from 'immutable';
 
 const StaticsTop = ({ totalDonated }) => {
   const { totalDonations, isLoading } = useGetTotalDonations();

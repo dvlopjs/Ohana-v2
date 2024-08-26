@@ -15,8 +15,7 @@ import {
 } from '@material-ui/core';
 import api from '../../../api/Api.js';
 import QuillEditor from 'src/components/QuillEditor';
-import { NavLink as RouterLink } from 'react-router-dom';
-
+import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {},
   addTab: {
@@ -60,6 +59,7 @@ const UserDetails = ({
   let [category, setCategory] = useState(1); //Me guarda la opción seleccionada
   const [formValues, setFormValues] = useState(null);
   const [descriptionBlur, setDescriptionBlur] = useState(false);
+  const history = useHistory();
 
   const initialValues = {
     projectName: '',
@@ -124,7 +124,7 @@ const UserDetails = ({
       confirmButtonText: 'Aceptar'
     }).then(result => {
       if (result.isConfirmed) {
-        window.location.replace('/app/events/browse');
+        window.history.back();
       }
     });
   };

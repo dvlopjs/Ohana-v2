@@ -63,12 +63,15 @@ const ProjectDescription = ({
         init_date: data.startDate,
         end_date: data.endDate,
         description: data.description,
-        event_type: data.event_type,
+        // event_type: data.event_type,
+        event_type: data.event_type === 0 ? 2 : data.event_type,
+
         image:
           image === ''
             ? 'https://www.argentina.gob.ar/sites/default/files/vinetas_justicia_cerca_04_quiero_donar_mis_organos.png'
             : image,
-        goal: data.goal,
+        goal: !data.goal ? 0 : data.goal,
+        items: data.items,
         contact: {
           id: eventId,
           name: localStorage.getItem('username'),
@@ -101,8 +104,9 @@ const ProjectDescription = ({
         init_date: data.startDate,
         end_date: data.endDate,
         description: data.description,
-        event_type: data.event_type,
-        goal: data.goal,
+        event_type: data.event_type === 0 ? 2 : data.event_type,
+        goal: !data.goal ? 0 : data.goal,
+        items: data.items,
         image:
           image === ''
             ? 'https://www.argentina.gob.ar/sites/default/files/vinetas_justicia_cerca_04_quiero_donar_mis_organos.png'

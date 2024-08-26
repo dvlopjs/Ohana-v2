@@ -14,6 +14,8 @@ import {
   Tooltip,
   Typography
 } from '@material-ui/core';
+import HelpIcon from '@material-ui/icons/Help';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Heart from '../assets/corazon.png';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StitchIcon from '../assets/Stitch-heart.svg';
@@ -99,7 +101,6 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
     setOpenShare(false);
   };
 
-  const handleEdit = () => {};
   useEffect(() => {
     api.getEvents();
   }, []);
@@ -213,9 +214,48 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
         <Grid alignItems="center" container justify="space-between" spacing={3}>
           <Grid item>
             <Typography variant="h5" color="textPrimary">
-              {!!project.goal
-                ? numeral(project.goal).format(`$0.00`)
-                : numeral(project.donations_count).format(`$0.00`)}
+              {project.goal === '0.00' ? (
+                <Box display={'flex'} alignItems={'center'} gridGap={4}>
+                  <Typography>Bienes</Typography>
+                  <Tooltip
+                    placement="top"
+                    title={
+                      <>
+                        <Typography
+                          variant="h5"
+                          style={{
+                            paddingBottom: '10px'
+                          }}
+                        >
+                          Bienes a donar :
+                        </Typography>
+                        {project.items.map(p => (
+                          <>
+                            <Box
+                              display={'flex'}
+                              alignItems={'center'}
+                              gridGap={4}
+                              key={p.name}
+                            >
+                              {' '}
+                              - <Typography variant="h6">{p.name}</Typography>
+                            </Box>
+                            <br />
+                          </>
+                        ))}
+                      </>
+                    }
+                    color="primary"
+                  >
+                    <HelpOutlineIcon
+                      fontSize="small"
+                      style={{ cursor: 'pointer' }}
+                    />
+                  </Tooltip>
+                </Box>
+              ) : (
+                numeral(project.goal).format(`$0.00`)
+              )}
             </Typography>
             <Typography noWrap variant="body2" color="textSecondary">
               Objetivo

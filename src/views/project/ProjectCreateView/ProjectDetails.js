@@ -46,7 +46,7 @@ const ProjectDetails = ({
   ...rest
 }) => {
   const classes = useStyles();
-  const [tag, setTag] = useState('');
+
   const [objetives, setObjetives] = useState([]);
   const [showTextObjetives, setShowTextObjetives] = useState([]);
   const [formValues, setFormValues] = useState(null);
@@ -80,7 +80,7 @@ const ProjectDetails = ({
   const initialValues = {
     typeOfObjective: '',
     money: '',
-    bienes: [],
+    items: [],
     startDate: new Date(),
     endDate: new Date(),
     descriptionOfObjective: 0
@@ -91,7 +91,7 @@ const ProjectDetails = ({
       const loadValues = {
         typeOfObjective: event.event_type.id === 1 ? 'Monetario' : 'Bienes',
         money: event.goal,
-        // bienes:event.bienes,
+        items: event.items,
         startDate: event.init_date,
         endDate: event.end_date,
         descriptionOfObjective: 0
@@ -121,7 +121,7 @@ const ProjectDetails = ({
       ...data,
       event_type: values.typeOfObjective === 'Monetario' ? 1 : 0,
       goal: !!event ? event.goal : parseInt(values.money),
-      bienes: !!event ? event.bienes : values.bienes,
+      items: !!event ? event.items : values.items,
       startDate: onDateChange(values.startDate) || event.init_date,
       endDate: onDateChange(values.endDate) || event.end_date
     });
@@ -150,8 +150,8 @@ const ProjectDetails = ({
             then: Yup.number().required('Ingrese un monto de dinero'),
             otherwise: Yup.number().notRequired()
           }),
-        bienes: Yup.array().when('typeOfObjective', {
-          is: 'Bienes',
+        items: Yup.array().when('typeOfObjective', {
+          is: 'items',
           then: Yup.array().required('Ingrese al menos un bien'),
           otherwise: Yup.array().notRequired()
         })
@@ -234,12 +234,13 @@ const ProjectDetails = ({
                 id="tags-filled"
                 options={donationItems.map(option => option)}
                 freeSolo
-                name="bienes"
-                value={values.bienes}
+                name="items"
+                value={values.items}
+                disabled={event ? true : false}
                 onChange={(event, newValue) => {
-                  setFieldValue('bienes', newValue);
+                  setFieldValue('items', newValue);
                 }}
-                onBlur={() => setFieldTouched('bienes', true)}
+                onBlur={() => setFieldTouched('items', true)}
                 renderTags={(value, getTagProps) =>
                   value.map((option, index) => {
                     const { key, ...tagProps } = getTagProps({ index });
@@ -255,8 +256,8 @@ const ProjectDetails = ({
                     {...params}
                     variant="filled"
                     label="Bienes"
-                    error={Boolean(touched.bienes && errors.bienes)}
-                    helperText={touched.bienes && errors.bienes}
+                    error={Boolean(touched.items && errors.items)}
+                    helperText={touched.items && errors.items}
                     placeholder="Introducir bienes a donar"
                   />
                 )}

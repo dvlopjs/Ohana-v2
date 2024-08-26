@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  makeStyles,
-  Typography
-} from '@material-ui/core';
+import { Box, Container, makeStyles, Typography } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Header from './Header';
 import Statistics from './Statistics';
 import Progress from './Progress';
 import Amounts from './Amounts';
-import Actions from './Actions'
+import Actions from './Actions';
 import LatestDonations from './LatestDonations';
-import api from './../../../api/Api'
+import api from './../../../api/Api';
+import ItemsList from './ItemsList';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     paddingTop: theme.spacing(3),
@@ -26,6 +22,8 @@ const OverviewView = ({ match, history }) => {
   const classes = useStyles();
   const [selectedEvent, setSelectedEvent] = useState();
 
+  const hasItems = selectedEvent?.items.length;
+
   const getEvent = async () => {
     try {
       const event = await api.getEventById(match.params.id);
@@ -36,35 +34,41 @@ const OverviewView = ({ match, history }) => {
   };
 
   useEffect(() => {
-    getEvent()
-  }, [])
-
+    getEvent();
+  }, []);
   return !!selectedEvent ? (
-    <Page
-      className={classes.root}
-      title="Overview"
-    >
+    <Page className={classes.root} title="Overview">
       <Container maxWidth="lg">
         <Header event={selectedEvent} />
+
+        {!hasItems ? (
+          <Box mt={3}>
+            <Amounts event={selectedEvent} />
+          </Box>
+        ) : null}
+
+        {hasItems ? (
+          <Box mt={3}>
+            <ItemsList event={selectedEvent} />
+          </Box>
+        ) : null}
+
         <Box mt={3}>
-          <Amounts event={selectedEvent}/>
-        </Box>
-        <Box mt={3}>
-          <Progress event={selectedEvent}/>
+          <Progress event={selectedEvent} />
         </Box>
         <Box mt={6}>
-          <Statistics event={selectedEvent}/>
+          <Statistics event={selectedEvent} />
         </Box>
         <Box mt={6}>
-          <Actions event={selectedEvent}/>
+          <Actions event={selectedEvent} />
         </Box>
         <Box mt={6}>
-          <LatestDonations event={selectedEvent}/>
+          <LatestDonations event={selectedEvent} />
         </Box>
       </Container>
     </Page>
   ) : (
-    <Typography>  </Typography>
+    <Typography> </Typography>
   );
 };
 
