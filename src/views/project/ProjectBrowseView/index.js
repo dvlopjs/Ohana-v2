@@ -6,6 +6,8 @@ import Filter from './Filter';
 import Header from './Header';
 import Results from './Results';
 import CircularProgress from '@material-ui/core/CircularProgress';
+// import { useLocation } from 'react-router-dom';
+import useLastLocation from 'src/views/extra/charts/ApexChartsView/hooks/useLastLocation';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,6 +26,7 @@ const ProjectBrowseView = () => {
   const classes = useStyles();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const getLastPath = useLastLocation();
 
   const getEvents = async () => {
     setLoading(true);

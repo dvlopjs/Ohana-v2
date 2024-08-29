@@ -230,18 +230,17 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
                           Bienes a donar :
                         </Typography>
                         {project.items.map(p => (
-                          <>
+                          <React.Fragment key={p}>
                             <Box
                               display={'flex'}
                               alignItems={'center'}
                               gridGap={4}
-                              key={p.name}
                             >
                               {' '}
-                              - <Typography variant="h6">{p.name}</Typography>
+                              - <Typography variant="h6">{p}</Typography>
                             </Box>
                             <br />
-                          </>
+                          </React.Fragment>
                         ))}
                       </>
                     }

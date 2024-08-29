@@ -24,7 +24,8 @@ import NoResults from './../../../components/NoResults/NoResults';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Filter from './../../project/ProjectBrowseView/Filter/index';
 import { Alert } from '@material-ui/lab';
-
+import { useLocation } from 'react-router-dom';
+import useLastLocation from 'src/views/extra/charts/ApexChartsView/hooks/useLastLocation';
 const timeRanges = [
   {
     value: 'today',
@@ -66,7 +67,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: '1%'
   },
   link: {
-    paddingLeft: '4px',
+    paddingLeft: '4px'
   }
 }));
 
@@ -79,7 +80,7 @@ const Header = ({ className, ...rest }) => {
   const [events, setEvents] = useState([]);
   const [accountMp, setAccountMp] = useState();
   const [loading, setLoading] = useState(false);
-
+  const getLastPath = useLastLocation();
   useEffect(() => {
     fetchEvent(1, 10, '');
     fetchMpAccount();
@@ -106,32 +107,32 @@ const Header = ({ className, ...rest }) => {
   };
 
   return (
-    <Container maxWidth='lg'>
+    <Container maxWidth="lg">
       <Grid
         container
         spacing={3}
-        justify='space-between'
+        justify="space-between"
         className={clsx(classes.root, className)}
         {...rest}
       >
         <Grid item>
           <Breadcrumbs
-            separator={<NavigateNextIcon fontSize='small' />}
-            aria-label='breadcrumb'
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
           >
             <Link
-              variant='body1'
-              color='inherit'
-              to='/app'
+              variant="body1"
+              color="inherit"
+              to="/app"
               component={RouterLink}
             >
               Dashboard
             </Link>
-            <Typography variant='body1' color='textPrimary'>
+            <Typography variant="body1" color="textPrimary">
               Listar
             </Typography>
           </Breadcrumbs>
-          <Typography variant='h3' color='textPrimary'>
+          <Typography variant="h3" color="textPrimary">
             Mis Campañas Activas
           </Typography>
         </Grid>
@@ -140,7 +141,7 @@ const Header = ({ className, ...rest }) => {
             ref={actionRef}
             onClick={() => setMenuOpen(true)}
             startIcon={
-              <SvgIcon fontSize='small'>
+              <SvgIcon fontSize="small">
                 <CalendarIcon />
               </SvgIcon>
             }
@@ -171,44 +172,54 @@ const Header = ({ className, ...rest }) => {
             ))}
           </Menu>
         </Grid>
-        <Container className={classes.container} maxWidth='lg'>
+        <Container className={classes.container} maxWidth="lg">
           <Box mt={3}>
             <Filter onlyName fetchEvent={fetchEvent} />
-            {!!accountMp && accountMp.name === '' && !!events && events.length > 0 && (
-              <div className={classes.btnDiv}>
-                <Alert severity='warning'>Tus campañas no pueden recibir donaciones porque no has asociado tu cuenta de
-                  mercado pago. Podes hacerlo desde
-                  <Link href='/app/config-account' className={classes.link} underline='hover'>
-                    {'este link'}
-                  </Link>
-                </Alert>
-              </div>
-            )}
+            {!!accountMp &&
+              accountMp.name === '' &&
+              !!events &&
+              events.length > 0 && (
+                <div className={classes.btnDiv}>
+                  <Alert severity="warning">
+                    Tus campañas no pueden recibir donaciones porque no has
+                    asociado tu cuenta de mercado pago. Podes hacerlo desde
+                    <Link
+                      href="/app/config-account"
+                      className={classes.link}
+                      underline="hover"
+                    >
+                      {'este link'}
+                    </Link>
+                  </Alert>
+                </div>
+              )}
           </Box>
         </Container>
 
         {!!loading ? (
-          <CircularProgress className={classes.progress} color='primary' size={50} />
+          <CircularProgress
+            className={classes.progress}
+            color="primary"
+            size={50}
+          />
+        ) : !!events && events.length > 0 ? (
+          <Grid container spacing={3}>
+            {events.map(project => (
+              <Grid
+                item
+                key={project.id}
+                md={mode === 'grid' ? 4 : 12}
+                sm={mode === 'grid' ? 6 : 12}
+                xs={12}
+              >
+                <CardEvents project={project} userMode={true} />
+              </Grid>
+            ))}
+          </Grid>
         ) : (
-          !!events && events.length > 0 ? (
-            <Grid container spacing={3}>
-              {events.map(project => (
-                <Grid
-                  item
-                  key={project.id}
-                  md={mode === 'grid' ? 4 : 12}
-                  sm={mode === 'grid' ? 6 : 12}
-                  xs={12}
-                >
-                  <CardEvents project={project} userMode={true} />
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Card className={classes.card}>
-              <NoResults title={'No se encontraron resultados'} />
-            </Card>
-          )
+          <Card className={classes.card}>
+            <NoResults title={'No se encontraron resultados'} />
+          </Card>
         )}
       </Grid>
     </Container>

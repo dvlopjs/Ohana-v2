@@ -278,6 +278,16 @@ class API {
     const { data } = await axiosInstance.get(path, config);
     return data;
   }
+
+  static async updateItemStatus(id, done) {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/events/item/done/`;
+    const form = { id, done }; // Form data con id y done
+    const { data } = await axiosInstance.put(path, form, config);
+    return data;
+  }
 }
 
 export default API;

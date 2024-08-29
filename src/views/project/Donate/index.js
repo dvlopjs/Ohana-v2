@@ -14,6 +14,8 @@ import Page from 'src/components/Page';
 import API from './../../../api/Api';
 import DonateAction from './DonateAction';
 import time from '../../../assets/time.svg';
+import { useHistory, useLocation } from 'react-router-dom';
+import DonationInstructions from './DonationInstructions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,6 +69,8 @@ const Donate = ({ match }) => {
   const [event, setEvent] = useState();
   const [notAllow, setNotAllow] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const history = useHistory();
+
   const form = {
     amount: 0,
     event: 0,
@@ -79,7 +83,14 @@ const Donate = ({ match }) => {
   }, []);
 
   const handleBack = () => {
-    window.history.back();
+    const lastPath = localStorage.getItem('lastPath');
+    console.log(lastPath);
+    if (lastPath) {
+      history.push(lastPath);
+    } else {
+      // Redirigir a una ruta por defecto si no hay una ruta guardada
+      history.push('/app/events/browse');
+    }
   };
 
   const createDonation = async () => {
@@ -113,6 +124,8 @@ const Donate = ({ match }) => {
     setCompleted(true);
   };
 
+  console.log(event);
+
   return (
     !!event && (
       <Page className={classes.root} title="Donar">
@@ -133,8 +146,14 @@ const Donate = ({ match }) => {
               {event.name}
             </Typography>
           </Box>
+
           {!completed ? (
-            <DonateAction onBack={handleBack} onComplete={handleComplete} />
+            <DonateAction
+              handleBack={handleBack}
+              onComplete={handleComplete}
+              event={event}
+              history={history}
+            />
           ) : !!notAllow ? (
             <Card>
               <div className="NotAllowMessage">

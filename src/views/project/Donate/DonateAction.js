@@ -9,6 +9,8 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import DonationInstructions from './DonationInstructions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,15 +39,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DonateAction = ({
-                        className,
-                        onBack,
-                        onComplete,
-                        ...rest
-                      }) => {
+  className,
+  onBack,
+  onComplete,
+  history,
+  handleBack,
+  event,
+  ...rest
+}) => {
   const classes = useStyles();
   const [selectedButton, setSelectedButton] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('');
   const [shownValue, setShownValue] = useState();
+  // const history = useHistory();
 
   const handleClick = (btn, amount) => {
     setSelectedButton(btn);
@@ -58,75 +64,66 @@ const DonateAction = ({
     setSelectedAmount(value);
     setShownValue(value);
   };
+  // const handleBack = () => {
+  //   history.replace(`/app/projects/${event.id}`);
+  // };
 
   const isValid = '';
 
-  return (
-    <Paper
-      elevation={0}
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+  return !event.items.length ? (
+    <Paper elevation={0} className={clsx(classes.root, className)} {...rest}>
       <div className={classes.div}>
-        <Typography variant='h3' color='textPrimary' className={classes.title}>
+        <Typography variant="h3" color="textPrimary" className={classes.title}>
           ¿Cuánto querés donar?
         </Typography>
         <Box mt={2} className={classes.divs}>
           <Button
             className={classes.button}
             color={selectedButton === 1 ? 'default' : 'secondary'}
-            variant='contained'
-            size='large'
+            variant="contained"
+            size="large"
             onClick={() => handleClick(1, '50')}
           >
-            <Typography variant='h4'>
-              $50
-            </Typography>
+            <Typography variant="h4">$50</Typography>
           </Button>
           <Button
             className={classes.button}
             color={selectedButton === 2 ? 'default' : 'secondary'}
-            variant='contained'
-            size='large'
+            variant="contained"
+            size="large"
             onClick={() => handleClick(2, '100')}
           >
-            <Typography variant='h4'>
-              $100
-            </Typography>
+            <Typography variant="h4">$100</Typography>
           </Button>
         </Box>
         <Box mt={2} className={classes.divs}>
           <Button
             className={classes.button}
             color={selectedButton === 3 ? 'default' : 'secondary'}
-            variant='contained'
-            size='large'
+            variant="contained"
+            size="large"
             onClick={() => handleClick(3, '200')}
           >
-            <Typography variant='h4'>
-              $200
-            </Typography>
+            <Typography variant="h4">$200</Typography>
           </Button>
           <Button
             className={classes.button}
             color={selectedButton === 4 ? 'default' : 'secondary'}
-            variant='contained'
-            size='large'
+            variant="contained"
+            size="large"
             onClick={() => handleClick(4, '500')}
           >
-            <Typography variant='h4'>
-              $500
-            </Typography>
+            <Typography variant="h4">$500</Typography>
           </Button>
         </Box>
         <Box mt={2} className={classes.divs}>
           <TextField
             fullWidth
-            label='Otro monto'
-            name='amount'
+            label="Otro monto"
+            name="amount"
             onChange={handleChange()}
-            variant='outlined'
-            onKeyPress={(event) => {
+            variant="outlined"
+            onKeyPress={event => {
               if (!/[0-9.]/.test(event.key)) {
                 event.preventDefault();
               }
@@ -134,27 +131,26 @@ const DonateAction = ({
             value={shownValue || ''}
           />
         </Box>
-        <Box mt={6} display='flex' className={classes.lastDiv}>
-          {onBack && (
-            <Button onClick={onBack} size='large'>
-              Atrás
-            </Button>
-          )}
+        <Box mt={6} display="flex" className={classes.lastDiv}>
+          <Button onClick={() => handleBack()} size="large">
+            Atrás
+          </Button>
+
           <Box flexGrow={1} />
           <Button
-            color='secondary'
-            onClick={() =>
-              onComplete(selectedAmount)
-            }
-            type='submit'
-            variant='contained'
-            size='large'
+            color="secondary"
+            onClick={() => onComplete(selectedAmount)}
+            type="submit"
+            variant="contained"
+            size="large"
           >
             Siguiente
           </Button>
         </Box>
       </div>
     </Paper>
+  ) : (
+    <DonationInstructions event={event} handleBack={handleBack} />
   );
 };
 
@@ -165,10 +161,8 @@ DonateAction.propTypes = {
 };
 
 DonateAction.defaultProps = {
-  onComplete: () => {
-  },
-  onBack: () => {
-  }
+  onComplete: () => {},
+  onBack: () => {}
 };
 
 export default DonateAction;

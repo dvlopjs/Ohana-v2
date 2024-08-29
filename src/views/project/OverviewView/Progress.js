@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -22,12 +22,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Progress = ({ event, className, ...rest }) => {
+const Progress = ({ event, className, items, ...rest }) => {
   const classes = useStyles();
-  // const [progress, setProgress] = useState();
 
-  // Calcula el progreso como un porcentaje (valor entre 0 y 100)
-  const progress = (Number(event.funds_collected) / Number(event.goal)) * 100;
+  //Bandera para manejar el tipo de progreso
+  const showItemProgress = event.items.length;
+
+  // Progreso basado en items completados
+  const totalItems = items.length;
+  const completedItems = items.filter(item => item.done).length;
+  const itemProgress = (completedItems / totalItems) * 100;
+
+  // Progreso basado en fondos recaudados
+  const fundProgress =
+    (Number(event.funds_collected) / Number(event.goal)) * 100;
+
+  // Determinar qué progreso mostrar
+  const progress = showItemProgress ? itemProgress : fundProgress;
+  const progressText = showItemProgress
+    ? `${completedItems} de ${totalItems} bienes completados`
+    : `${numeral(Number(event.funds_collected) / Number(event.goal)).format(
+        '0.00%'
+      )} del objetivo alcanzado`;
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
@@ -41,9 +57,7 @@ const Progress = ({ event, className, ...rest }) => {
       </Typography>
       <Box display="flex" alignItems="center" flexWrap="wrap">
         <Typography variant="h3" color="textPrimary">
-          {numeral(Number(event.funds_collected) / Number(event.goal)).format(
-            '0.00%'
-          )}
+          {progressText}
         </Typography>
         <LinearProgress
           className={classes.progress}
@@ -57,7 +71,8 @@ const Progress = ({ event, className, ...rest }) => {
 };
 
 Progress.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  event: PropTypes.object.isRequired
 };
 
 export default Progress;

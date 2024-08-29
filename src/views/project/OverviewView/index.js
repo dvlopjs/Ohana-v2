@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
 const OverviewView = ({ match, history }) => {
   const classes = useStyles();
   const [selectedEvent, setSelectedEvent] = useState();
+  const [items, setItems] = useState([]);
 
   const hasItems = selectedEvent?.items.length;
 
@@ -28,6 +29,7 @@ const OverviewView = ({ match, history }) => {
     try {
       const event = await api.getEventById(match.params.id);
       setSelectedEvent(event);
+      setItems(event.items_complete);
     } catch (err) {
       console.error(err);
     }
@@ -49,12 +51,16 @@ const OverviewView = ({ match, history }) => {
 
         {hasItems ? (
           <Box mt={3}>
-            <ItemsList event={selectedEvent} />
+            <ItemsList
+              event={selectedEvent}
+              items={items}
+              setItems={setItems}
+            />
           </Box>
         ) : null}
 
         <Box mt={3}>
-          <Progress event={selectedEvent} />
+          <Progress event={selectedEvent} items={items} />
         </Box>
         <Box mt={6}>
           <Statistics event={selectedEvent} />
@@ -67,9 +73,7 @@ const OverviewView = ({ match, history }) => {
         </Box>
       </Container>
     </Page>
-  ) : (
-    <Typography> </Typography>
-  );
+  ) : null;
 };
 
 export default OverviewView;

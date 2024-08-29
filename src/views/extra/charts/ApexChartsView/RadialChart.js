@@ -47,7 +47,7 @@ const RadialChart = () => {
         mode: theme.palette.type
       }
     },
-    series: [companiesEnded.percentage_finished]
+    series: [companiesEnded.percentage_finished.toFixed(2)]
   };
 
   return (
