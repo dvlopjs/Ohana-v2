@@ -288,6 +288,16 @@ class API {
     const { data } = await axiosInstance.put(path, form, config);
     return data;
   }
+
+  static async updateStateLike(id) {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/events/like/${id}/`;
+    const form = {};
+    const { data } = await axiosInstance.put(path, form, config);
+    return data;
+  }
 }
 
 export default API;

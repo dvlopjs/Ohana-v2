@@ -14,7 +14,6 @@ import {
   Tooltip,
   Typography
 } from '@material-ui/core';
-import HelpIcon from '@material-ui/icons/Help';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Heart from '../assets/corazon.png';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -35,6 +34,7 @@ import api from '../api/Api';
 import Swal from 'sweetalert2';
 //import Swal from 'sweetalert2/src/sweetalert2.js'
 import ShareDialog from './ShareDialog';
+import useLikes from 'src/views/extra/charts/ApexChartsView/hooks/useLikes';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -79,19 +79,8 @@ moment.locale('es');
 
 const CardEvents = ({ className, project, userMode, ...rest }) => {
   const classes = useStyles();
-  const [isLiked, setLiked] = useState(true);
+  const { isLiked, likesCount, handleLike } = useLikes(project);
   const [openShare, setOpenShare] = useState(false);
-  const [likesCount, setLikesCount] = useState(10);
-
-  const handleLike = () => {
-    setLiked(true);
-    setLikesCount(prevLikes => prevLikes + 1);
-  };
-
-  const handleUnlike = () => {
-    setLiked(false);
-    setLikesCount(prevLikes => prevLikes - 1);
-  };
 
   const openShareDialog = () => {
     setOpenShare(true);
@@ -306,7 +295,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
               <Tooltip title="Unlike">
                 <IconButton
                   className={classes.likedButton}
-                  onClick={handleUnlike}
+                  onClick={handleLike}
                 >
                   <Avatar src={StitchIcon} />
                 </IconButton>

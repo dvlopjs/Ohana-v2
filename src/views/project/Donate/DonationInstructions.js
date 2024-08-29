@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import DescriptionIcon from '@material-ui/icons/Description';
 import moment from 'moment';
+import { ListItemsToDonate } from 'src/components/reusable/ListItemsToDonate';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4),
@@ -64,7 +65,7 @@ const DonationInstructions = ({ event, handleBack }) => {
         </Typography>
         <Typography className={classes.text} color="textSecondary">
           Nuestras oficinas están abiertas para recibir donaciones los
-          siguientes días
+          siguientes días:
         </Typography>
         <ul style={{ paddingLeft: 20 }}>
           {event.attention_schedule.map((x, i) => {
@@ -89,11 +90,11 @@ const DonationInstructions = ({ event, handleBack }) => {
           - ¿Qué se necesita?
         </Typography>
         <Typography className={classes.text} color="textSecondary">
-          Actualmente estamos recolectando alimentos no perecederos, ropa en
-          buen estado, y juguetes para niños. También se aceptan donaciones
-          monetarias que serán usadas para financiar nuestros programas de
-          ayuda.
+          Actualmente la campaña{' '}
+          <span style={{ fontWeight: 'bold' }}>{event.name}</span> está
+          recolectando los siguientes bienes:
         </Typography>
+        <ListItemsToDonate event={event} />
       </Box>
       <Divider />
       <Box
