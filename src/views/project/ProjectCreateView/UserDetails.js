@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core';
 import api from '../../../api/Api.js';
 import QuillEditor from 'src/components/QuillEditor';
-import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {},
   addTab: {
@@ -59,7 +58,6 @@ const UserDetails = ({
   let [category, setCategory] = useState(1); //Me guarda la opción seleccionada
   const [formValues, setFormValues] = useState(null);
   const [descriptionBlur, setDescriptionBlur] = useState(false);
-  const history = useHistory();
 
   const initialValues = {
     projectName: '',
@@ -257,12 +255,12 @@ const UserDetails = ({
                 setCategory((category = parseInt(event.target.value)));
               }}
               onChange={handleChange}
-              value={values.category}
+              value={values.category || ''}
               variant="outlined"
               SelectProps={{ native: true }}
             >
               <>
-                <option defaultValue=" " selected />
+                <option selected />
                 {categoryOption &&
                   categoryOption.map(option => (
                     <option key={option.id} value={option.id}>
