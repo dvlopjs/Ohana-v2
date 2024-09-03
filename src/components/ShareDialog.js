@@ -24,7 +24,6 @@ import {
   TwitterIcon,
   WhatsappIcon
 } from 'react-share';
-import { Image } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -41,14 +40,16 @@ const useStyles = makeStyles(() => ({
 
 const ShareDialog = ({ project, openShare, closeDialog }) => {
   const classes = useStyles();
-  
+
   return (
     <Dialog onClose={closeDialog} open={openShare}>
       <DialogTitle className={classes.dialogTitle}>
-        <Typography variant='h5'>Compartir </Typography>
-        <Typography variant='h5' color='primary'>{project.name}</Typography>
+        <Typography>Compartir </Typography>{' '}
+        <Typography color="primary" style={{ paddingLeft: '5px' }}>
+          {project.name}
+        </Typography>
       </DialogTitle>
-      <Box py={2} px={5} display='flex' justifyContent='center'>
+      <Box py={2} px={5} display="flex" justifyContent="center">
         <EmailShareButton
           subject={`${project.name}`}
           body={`${project.name} "\n" ${project.description}`}

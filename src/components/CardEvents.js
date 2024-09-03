@@ -148,16 +148,16 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
           </Avatar>
           <Box className={classes.nameBox} ml={2}>
             <Tooltip title={project.name}>
-              <Typography noWrap variant="body2" color="textSecondary">
-                <Link
-                  color="textPrimary"
-                  component={RouterLink}
-                  to={`/app/projects/overview/${project.id}`}
-                  variant="h5"
-                >
+              <Link
+                color="textPrimary"
+                component={RouterLink}
+                to={`/app/projects/overview/${project.id}`}
+                variant="h5"
+              >
+                <Typography noWrap variant="body2" color="textSecondary">
                   {project.name}
-                </Link>
-              </Typography>
+                </Typography>
+              </Link>
             </Tooltip>
             <div
               style={{

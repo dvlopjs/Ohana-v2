@@ -66,11 +66,13 @@ const OverviewView = ({ match, history }) => {
           <Statistics event={selectedEvent} />
         </Box>
         <Box mt={6}>
-          <Actions event={selectedEvent} />
+          <Actions event={selectedEvent} setSelectedEvent={setSelectedEvent} />
         </Box>
-        <Box mt={6}>
-          <LatestDonations event={selectedEvent} />
-        </Box>
+        {!hasItems ? (
+          <Box mt={6}>
+            <LatestDonations event={selectedEvent} />
+          </Box>
+        ) : null}
       </Container>
     </Page>
   ) : null;

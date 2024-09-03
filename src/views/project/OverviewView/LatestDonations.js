@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import numeral from 'numeral';
@@ -29,8 +26,7 @@ import Label from 'src/components/Label';
 import API from '../../../api/Api';
 import NoResults from '../../../components/NoResults/NoResults';
 
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   technology: {
     height: 30,
@@ -44,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   nameDiv: {
     width: '50%'
-  },
+  }
 }));
 
 const LatestDonations = ({ event, className, ...rest }) => {
@@ -55,7 +51,6 @@ const LatestDonations = ({ event, className, ...rest }) => {
     if (event.id) {
       getDonationsByEvent();
     }
-
   }, []);
 
   const getDonationsByEvent = async () => {
@@ -67,7 +62,7 @@ const LatestDonations = ({ event, className, ...rest }) => {
     }
   };
 
-  const handleStatus = (status) => {
+  const handleStatus = status => {
     switch (status) {
       case 'accredited': {
         return 'Acreditado';
@@ -76,52 +71,34 @@ const LatestDonations = ({ event, className, ...rest }) => {
         return 'Reintegrado';
       }
       case 'rejected': {
-        return 'Rechazado'
-      }      
+        return 'Rechazado';
+      }
       default: {
         return 'Rechazado';
       }
     }
-  }
+  };
 
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
-      {!!donations.results && !!donations.results.length > 0 ?
+    <Card className={clsx(classes.root, className)} {...rest}>
+      {!!donations.results && !!donations.results.length > 0 ? (
         <div>
           <CardHeader
             action={<GenericMoreButton />}
-            title='Últimas donaciones'
+            title="Últimas donaciones"
           />
           <Divider />
           <PerfectScrollbar>
             <Box minWidth={900}>
-
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>
-                      Numero
-                    </TableCell>
-                    <TableCell>
-                      Nombre
-                    </TableCell>
-                    <TableCell>
-                      Estado del pago
-                    </TableCell>
-                    <TableCell
-                      sortDirection='desc'
-                    >
-                      <Tooltip
-                        enterDelay={300}
-                        title='Sort'
-                      >
-                        <TableSortLabel
-                          active
-                          direction='desc'
-                        >
+                    <TableCell>Numero</TableCell>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Estado del pago</TableCell>
+                    <TableCell sortDirection="desc">
+                      <Tooltip enterDelay={300} title="Sort">
+                        <TableSortLabel active direction="desc">
                           Total
                         </TableSortLabel>
                       </Tooltip>
@@ -129,64 +106,67 @@ const LatestDonations = ({ event, className, ...rest }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {donations.results.map((donation) => (
-                    <TableRow
-                      hover
-                      key={donation.id}
-                    >
+                  {donations.results.map(donation => (
+                    <TableRow hover key={donation.id}>
+                      <TableCell>{donation.id}</TableCell>
                       <TableCell>
-                        {donation.id}
-                      </TableCell>
-                      <TableCell>
-                        <Box
-                          display='flex'
-                          alignItems='center'
-                        >
+                        <Box display="flex" alignItems="center">
                           <Box ml={1} className={classes.nameDiv}>
                             <div className={classes.msg}>
-                              <Typography variant='subtitle2' color='primary'> {donation.user}</Typography></div>
-                            <Typography variant='body2'> ¡Gracias por tu donación!</Typography>
+                              <Typography variant="subtitle2" color="primary">
+                                {' '}
+                                {donation.user}
+                              </Typography>
+                            </div>
+                            <Typography variant="body2">
+                              {' '}
+                              ¡Gracias por tu donación!
+                            </Typography>
                           </Box>
                         </Box>
                       </TableCell>
                       <TableCell>
                         <Label
                           className={classes.label}
-                          color={donation.status_detail === 'accredited' ? 'success' : 'error'}
+                          color={
+                            donation.status_detail === 'accredited'
+                              ? 'success'
+                              : 'error'
+                          }
                         >
                           {handleStatus(donation.status_detail)}
                         </Label>
                       </TableCell>
                       <TableCell>
-                        {numeral(donation.donation[0].unit_price).format(`${'$'}0,0.00`)}
+                        {numeral(donation.donation[0].unit_price).format(
+                          `${'$'}0,0.00`
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-
-
             </Box>
           </PerfectScrollbar>
-          <Box
-            p={2}
-            display='flex'
-            justifyContent='flex-end'
-          >
+          <Box p={2} display="flex" justifyContent="flex-end">
             <Button
               component={RouterLink}
-              size='small'
-              to='/app/projects'
+              size="small"
+              to="/app/projects"
               endIcon={<NavigateNextIcon />}
             >
               Ver todo
             </Button>
-          </Box></div>
-        :
+          </Box>
+        </div>
+      ) : (
         <Box ml={1}>
-          <NoResults title={'Esta camapaña no tiene donaciones'} subtitle={'¡Sé el primero!'} />
+          <NoResults
+            title={'Esta campaña no tiene donaciones'}
+            subtitle={'¡Sé el primero!'}
+          />
         </Box>
-      }
+      )}
     </Card>
   );
 };

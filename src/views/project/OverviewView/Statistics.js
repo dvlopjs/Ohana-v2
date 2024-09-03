@@ -52,49 +52,6 @@ const Statistics = ({ event, className, ...rest }) => {
   const classes = useStyles();
 
   return (
-    // <Card className={clsx(classes.root, className)} {...rest}>
-    //   <Grid container>
-    //     <Grid className={classes.item} item md={4} sm={6} xs={12}>
-    //       <div className={classes.icon}>
-    //         <HeartIcon color="#5465D1" />
-    //         <InputBase
-    //           value={event.donations_count || 0}
-    //           inputProps={{ 'aria-label': 'donaciones' }}
-    //         />
-    //       </div>
-    //       <Typography variant="overline" color="textPrimary">
-    //         {event.donations_count > 1 || event.donations_count === 0
-    //           ? 'Donaciones'
-    //           : 'Donación'}
-    //       </Typography>
-    //     </Grid>
-    //     <Grid className={classes.item} item md={4} sm={6} xs={12}>
-    //       <div className={classes.icon}>
-    //         <ShareIcon color="#5465D1" />
-    //         <InputBase
-    //           value="7.7K"
-    //           inputProps={{ 'aria-label': 'veces compartido' }}
-    //         />
-    //       </div>
-    //       <Typography variant="overline" color="textSecondary">
-    //         Veces compartido
-    //       </Typography>
-    //     </Grid>
-    //     <Grid className={classes.item} item md={4} sm={6} xs={12}>
-    //       <div className={classes.icon}>
-    //         <BellIcon color="#5465D1" />
-    //         <InputBase
-    //           value="150"
-    //           inputProps={{ 'aria-label': 'suscriptos' }}
-    //         />
-    //       </div>
-    //       <Typography variant="overline" color="textSecondary">
-    //         Suscriptos
-    //       </Typography>
-    //     </Grid>
-    //   </Grid>
-    // </Card>
-
     <>
       <Grid container spacing={3}>
         <Grid item md={4} sm={4} xs={12}>
@@ -112,7 +69,7 @@ const Statistics = ({ event, className, ...rest }) => {
           <CardStaticsTop>
             <CardContentStatics
               icon={<ShareIcon color="#5465D1" />}
-              data={`${event.likes_count}`}
+              data={`${event.shared}`}
               text={'Veces compartido'}
               isLoading={false}
             />

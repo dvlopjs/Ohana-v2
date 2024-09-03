@@ -9,7 +9,6 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import DonationInstructions from './DonationInstructions';
 
 const useStyles = makeStyles(theme => ({
@@ -51,7 +50,6 @@ const DonateAction = ({
   const [selectedButton, setSelectedButton] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('');
   const [shownValue, setShownValue] = useState();
-  // const history = useHistory();
 
   const handleClick = (btn, amount) => {
     setSelectedButton(btn);
@@ -64,11 +62,6 @@ const DonateAction = ({
     setSelectedAmount(value);
     setShownValue(value);
   };
-  // const handleBack = () => {
-  //   history.replace(`/app/projects/${event.id}`);
-  // };
-
-  const isValid = '';
 
   return !event.items.length ? (
     <Paper elevation={0} className={clsx(classes.root, className)} {...rest}>

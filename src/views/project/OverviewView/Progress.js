@@ -6,7 +6,9 @@ import {
   Card,
   Typography,
   LinearProgress,
-  makeStyles
+  makeStyles,
+  useMediaQuery,
+  useTheme
 } from '@material-ui/core';
 import numeral from 'numeral';
 
@@ -24,6 +26,9 @@ const useStyles = makeStyles(theme => ({
 
 const Progress = ({ event, className, items, ...rest }) => {
   const classes = useStyles();
+  const theme = useTheme();
+
+  const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
 
   //Bandera para manejar el tipo de progreso
   const showItemProgress = event.items.length;
@@ -56,7 +61,7 @@ const Progress = ({ event, className, items, ...rest }) => {
         Progreso
       </Typography>
       <Box display="flex" alignItems="center" flexWrap="wrap">
-        <Typography variant="h3" color="textPrimary">
+        <Typography variant={mobileDevice ? 'h6' : 'h3'} color="textPrimary">
           {progressText}
         </Typography>
         <LinearProgress

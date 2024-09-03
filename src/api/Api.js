@@ -298,6 +298,16 @@ class API {
     const { data } = await axiosInstance.put(path, form, config);
     return data;
   }
+
+  static async updateStateShare(id) {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    };
+    let path = `/api/events/share/${id}/`;
+    const form = {};
+    const { data } = await axiosInstance.put(path, form, config);
+    return data;
+  }
 }
 
 export default API;
