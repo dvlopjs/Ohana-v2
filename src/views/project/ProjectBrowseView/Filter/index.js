@@ -16,9 +16,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Filter = ({ className, onlyName, fetchEvent, ...rest }) => {
+const Filter = ({
+  className,
+  onlyName,
+  inputValue,
+  setInputValue,
+  ...rest
+}) => {
   const classes = useStyles();
-  const [inputValue, setInputValue] = useState('');
   const [selectOptions, setSelectOptions] = useState([]);
   const [categoriesNames, setCategoriesNames] = useState([]);
 
@@ -78,10 +83,6 @@ const Filter = ({ className, onlyName, fetchEvent, ...rest }) => {
   const handleMultiSelectChange = value => {
     setChips(value);
   };
-
-  useEffect(() => {
-    fetchEvent(1, 15, inputValue);
-  }, [inputValue]);
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>

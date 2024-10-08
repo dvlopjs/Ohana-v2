@@ -104,7 +104,6 @@ const GeneralSettings = ({ className, user, ...rest }) => {
         values,
         { resetForm, setErrors, setStatus, setSubmitting }
       ) => {
-        console.log('submiteando');
         values.country = 1;
         values.province = selectedState || user.additional_info.province;
         values.city = selectedCity || user.additional_info.city;

@@ -36,11 +36,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Results = ({ className, projects, fetchEvent, ...rest }) => {
+const Results = ({
+  className,
+  projects,
+  pageSize,
+  page,
+  setPage,
+  setPageSize,
+  ...rest
+}) => {
   const classes = useStyles();
   const [mode, setMode] = useState('grid');
-  const [pageSize, setPageSize] = useState();
-  const [page, setPage] = useState(1);
 
   const handleModeChange = (event, value) => {
     setMode(value);
@@ -49,10 +55,6 @@ const Results = ({ className, projects, fetchEvent, ...rest }) => {
   const handleChange = (event, value) => {
     setPage(value);
   };
-
-  useEffect(() => {
-    fetchEvent(page, 15, '');
-  }, [page]);
 
   const getPageSize = () => {
     let pageSize = 1;

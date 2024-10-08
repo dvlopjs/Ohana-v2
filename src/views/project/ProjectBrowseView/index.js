@@ -7,7 +7,7 @@ import Header from './Header';
 import Results from './Results';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // import { useLocation } from 'react-router-dom';
-import useLastLocation from 'src/views/extra/charts/ApexChartsView/hooks/useLastLocation';
+import useDebounce from 'src/hooks/useDebounce';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,14 +24,17 @@ const useStyles = makeStyles(theme => ({
 
 const ProjectBrowseView = () => {
   const classes = useStyles();
+  const [page, setPage] = useState(1);
   const [events, setEvents] = useState([]);
+  const [pageSize, setPageSize] = useState();
   const [loading, setLoading] = useState(false);
-  const getLastPath = useLastLocation();
+  const [inputValue, setInputValue] = useState('');
+  const debouncedSearchTerm = useDebounce(inputValue, 350);
 
-  const getEvents = async () => {
+  const handleGetEvents = async () => {
     setLoading(true);
     try {
-      const response = await api.getEvents();
+      const response = await api.getEvents(page, pageSize, debouncedSearchTerm);
       setEvents(response);
       setLoading(false);
     } catch (err) {
@@ -40,25 +43,15 @@ const ProjectBrowseView = () => {
   };
 
   useEffect(() => {
-    getEvents();
-  }, []);
-
-  const fetchEvent = async (pageSize = 1, results = 15, data, state) => {
-    let response;
-    try {
-      response = await api.getEvents(pageSize, results, data, state);
-      setEvents(response);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    handleGetEvents();
+  }, [debouncedSearchTerm, page]);
 
   return (
     <Page className={classes.root} title="Explorar campañas | Ohana">
       <Container maxWidth="lg">
         <Header />
         <Box mt={3}>
-          <Filter fetchEvent={fetchEvent} />
+          <Filter inputValue={inputValue} setInputValue={setInputValue} />
         </Box>
         {!!loading ? (
           <CircularProgress
@@ -68,7 +61,13 @@ const ProjectBrowseView = () => {
           />
         ) : (
           <Box mt={4}>
-            <Results projects={events} fetchEvent={fetchEvent} />
+            <Results
+              projects={events}
+              pageSize={pageSize}
+              page={page}
+              setPage={setPage}
+              setPageSize={setPageSize}
+            />
           </Box>
         )}
       </Container>

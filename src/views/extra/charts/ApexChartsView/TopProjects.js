@@ -25,7 +25,6 @@ const TopProjects = ({ lastDonations }) => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down('xs'));
 
-  console.log(isXs);
   const [valueSwitch, setValueSwitch] = useState(false);
 
   const handleChangeSwitch = e => {

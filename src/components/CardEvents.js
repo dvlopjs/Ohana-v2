@@ -90,10 +90,6 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
     setOpenShare(false);
   };
 
-  useEffect(() => {
-    api.getEvents();
-  }, []);
-
   const deleteCampaign = () => {
     Swal.fire({
       title: `¿Está seguro que desea borrar su campaña ${project.name}?`,

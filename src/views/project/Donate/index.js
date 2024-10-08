@@ -84,7 +84,6 @@ const Donate = ({ match }) => {
 
   const handleBack = () => {
     const lastPath = localStorage.getItem('lastPath');
-    console.log(lastPath);
     if (lastPath) {
       history.push(lastPath);
     } else {
@@ -123,8 +122,6 @@ const Donate = ({ match }) => {
     createDonation(JSON.stringify(form));
     setCompleted(true);
   };
-
-  console.log(event);
 
   return (
     !!event && (
