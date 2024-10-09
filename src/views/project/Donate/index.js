@@ -14,8 +14,7 @@ import Page from 'src/components/Page';
 import API from './../../../api/Api';
 import DonateAction from './DonateAction';
 import time from '../../../assets/time.svg';
-import { useHistory, useLocation } from 'react-router-dom';
-import DonationInstructions from './DonationInstructions';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,13 +82,7 @@ const Donate = ({ match }) => {
   }, []);
 
   const handleBack = () => {
-    const lastPath = localStorage.getItem('lastPath');
-    if (lastPath) {
-      history.push(lastPath);
-    } else {
-      // Redirigir a una ruta por defecto si no hay una ruta guardada
-      history.push('/app/events/browse');
-    }
+    history.goBack();
   };
 
   const createDonation = async () => {

@@ -63,10 +63,14 @@ const OverviewView = ({ match, history }) => {
           <Progress event={selectedEvent} items={items} />
         </Box>
         <Box mt={6}>
-          <Statistics event={selectedEvent} />
+          <Statistics event={selectedEvent} hasItems={hasItems} />
         </Box>
         <Box mt={6}>
-          <Actions event={selectedEvent} setSelectedEvent={setSelectedEvent} />
+          <Actions
+            event={selectedEvent}
+            setSelectedEvent={setSelectedEvent}
+            hasItems={hasItems}
+          />
         </Box>
         {!hasItems ? (
           <Box mt={6}>

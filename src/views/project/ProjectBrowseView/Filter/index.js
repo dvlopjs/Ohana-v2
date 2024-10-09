@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Box, Card, Chip, Divider, Input, makeStyles } from '@material-ui/core';
@@ -21,13 +21,19 @@ const Filter = ({
   onlyName,
   inputValue,
   setInputValue,
+  onApplyFilters,
   ...rest
 }) => {
   const classes = useStyles();
   const [selectOptions, setSelectOptions] = useState([]);
   const [categoriesNames, setCategoriesNames] = useState([]);
-
-  const [chips, setChips] = useState(['Monetaria']);
+  const [chips, setChips] = useState([]);
+  const [filters, setFilters] = useState({
+    tipos: [],
+    ubicaciones: [],
+    categorias: [],
+    nombre: ''
+  });
 
   useEffect(() => {
     fetchCategories();
@@ -51,39 +57,71 @@ const Filter = ({
   }, [categoriesNames]);
 
   const fetchCategories = async () => {
-    let catNames = [];
     try {
       let response = await api.getCategories();
-      response.map(category => catNames.push(category.name));
+      const catNames = response.map(category => category.name);
       setCategoriesNames(catNames);
     } catch (e) {
       console.error(e);
     }
   };
+
   const handleInputChange = event => {
-    event.persist();
-    setInputValue(event.target.value);
-  };
-
-  const handleInputKeyup = event => {
-    event.persist();
-
-    if (event.keyCode === 13 && inputValue) {
-      if (!chips.includes(inputValue)) {
-        setChips(prevChips => [...prevChips, inputValue]);
-        setInputValue('');
-      }
-    }
+    const newValue = event.target.value;
+    setInputValue(newValue);
+    setFilters(prev => ({ ...prev, nombre: newValue }));
+    applyFilters({ ...filters, nombre: newValue });
   };
 
   const handleChipDelete = chip => {
     setChips(prevChips => prevChips.filter(prevChip => chip !== prevChip));
+
+    // Actualizar filtros
+    const updatedFilters = { ...filters };
+    Object.keys(updatedFilters).forEach(key => {
+      updatedFilters[key] = updatedFilters[key].filter(item => item !== chip);
+    });
+    setFilters(updatedFilters);
+    applyFilters(updatedFilters);
   };
 
-  const handleMultiSelectChange = value => {
-    setChips(value);
-  };
+  const handleMultiSelectChange = useCallback(
+    (label, selectedOptions) => {
+      const filterKey =
+        label.toLowerCase() === 'tipo'
+          ? 'tipos'
+          : label.toLowerCase() === 'ubicación'
+          ? 'ubicaciones'
+          : 'categorias';
 
+      const updatedFilters = {
+        ...filters,
+        [filterKey]: selectedOptions
+      };
+
+      setFilters(updatedFilters);
+      setChips([
+        ...new Set([
+          ...updatedFilters.tipos,
+          ...updatedFilters.ubicaciones,
+          ...updatedFilters.categorias
+        ])
+      ]);
+      applyFilters(updatedFilters);
+    },
+    [filters]
+  );
+
+  const applyFilters = useCallback(
+    currentFilters => {
+      if (onApplyFilters) {
+        onApplyFilters(currentFilters);
+      }
+    },
+    [onApplyFilters]
+  );
+
+  console.log(filters);
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <Box p={2} display="flex" alignItems="center">
@@ -93,7 +131,6 @@ const Filter = ({
           fullWidth
           className={classes.searchInput}
           onChange={handleInputChange}
-          onKeyUp={handleInputKeyup}
           placeholder="Nombre campaña"
           value={inputValue}
         />
@@ -117,9 +154,19 @@ const Filter = ({
               <MultiSelect
                 key={option.label}
                 label={option.label}
-                onChange={handleMultiSelectChange}
+                onChange={selectedOptions =>
+                  handleMultiSelectChange(option.label, selectedOptions)
+                }
                 options={option.options}
-                value={chips}
+                value={
+                  filters[
+                    option.label.toLowerCase() === 'tipo'
+                      ? 'tipos'
+                      : option.label.toLowerCase() === 'ubicación'
+                      ? 'ubicaciones'
+                      : 'categorias'
+                  ]
+                }
               />
             ))}
           </Box>
@@ -130,7 +177,11 @@ const Filter = ({
 };
 
 Filter.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  onlyName: PropTypes.bool,
+  inputValue: PropTypes.string,
+  setInputValue: PropTypes.func,
+  onApplyFilters: PropTypes.func
 };
 
 export default Filter;

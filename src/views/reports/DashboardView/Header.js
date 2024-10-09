@@ -24,8 +24,7 @@ import NoResults from './../../../components/NoResults/NoResults';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Filter from './../../project/ProjectBrowseView/Filter/index';
 import { Alert } from '@material-ui/lab';
-import { useLocation } from 'react-router-dom';
-import useLastLocation from 'src/views/extra/charts/ApexChartsView/hooks/useLastLocation';
+
 const timeRanges = [
   {
     value: 'today',

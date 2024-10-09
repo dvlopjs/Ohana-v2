@@ -13,7 +13,8 @@ import {
   CardContent,
   Box,
   Chip,
-  makeStyles
+  makeStyles,
+  Tooltip
 } from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ReactConfetti from 'react-confetti';
@@ -26,6 +27,11 @@ const ItemsList = ({ event, items, setItems }) => {
   const [loadingItems, setLoadingItems] = useState({}); // Estado para manejar el loading
   const [loadingDisabledItems, setLoadingDisabledItems] = useState(false);
   const firstRender = useRef(true);
+
+  const username = localStorage.getItem('username');
+  const isOwner = username === event?.contact?.name;
+
+  console.log(isOwner);
 
   const handleToggle = async (id, currentDoneStatus) => {
     // Configurar el estado de carga para el ítem específico
@@ -91,6 +97,29 @@ const ItemsList = ({ event, items, setItems }) => {
                 <ListItemIcon style={{ minWidth: '30px' }}>
                   {loadingItems[item.id] ? (
                     <CircularProgress size={24} /> // Mostrar spinner de carga
+                  ) : !isOwner ? (
+                    <Tooltip
+                      title={
+                        <Typography variant="body2">
+                          Solo los propietarios pueden marcar los bienes como
+                          completados.
+                        </Typography>
+                      }
+                    >
+                      <span>
+                        <Checkbox
+                          edge="start"
+                          disabled={!isOwner}
+                          checked={item.done}
+                          onClick={() =>
+                            !loadingDisabledItems &&
+                            handleToggle(item.id, item.done)
+                          }
+                          tabIndex={-1}
+                          disableRipple
+                        />
+                      </span>
+                    </Tooltip>
                   ) : (
                     <Checkbox
                       edge="start"

@@ -48,24 +48,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Statistics = ({ event, className, ...rest }) => {
+const Statistics = ({ event, className, hasItems, ...rest }) => {
   const classes = useStyles();
 
   return (
     <>
       <Grid container spacing={3}>
-        <Grid item md={4} sm={4} xs={12}>
-          <CardStaticsTop>
-            <CardContentStatics
-              icon={<ActivityIcon color="#5465D1" />}
-              data={event.donations_count || 0}
-              text={'Cant. total de donaciones'}
-              isLoading={false}
-            />
-          </CardStaticsTop>
-        </Grid>
+        {!hasItems ? (
+          <Grid item sm={4} xs={12}>
+            <CardStaticsTop>
+              <CardContentStatics
+                icon={<ActivityIcon color="#5465D1" />}
+                data={event.donations_count || 0}
+                text={'Cant. total de donaciones'}
+                isLoading={false}
+              />
+            </CardStaticsTop>
+          </Grid>
+        ) : null}
 
-        <Grid item md={4} sm={4} xs={12}>
+        <Grid item sm={!hasItems ? 4 : 6} xs={12}>
           <CardStaticsTop>
             <CardContentStatics
               icon={<ShareIcon color="#5465D1" />}
@@ -76,7 +78,7 @@ const Statistics = ({ event, className, ...rest }) => {
           </CardStaticsTop>
         </Grid>
 
-        <Grid item md={4} sm={4} xs={12}>
+        <Grid item sm={!hasItems ? 4 : 6} xs={12}>
           <CardStaticsTop>
             <CardContentStatics
               icon={<HeartIcon color="#5465D1" />}

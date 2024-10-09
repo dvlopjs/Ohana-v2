@@ -11,6 +11,7 @@ import {
 import Page from 'src/components/Page';
 import shareSVG from '../../../assets/share-2.svg';
 import like from '../../../assets/like.svg';
+import { List as ListIcon } from 'react-feather';
 
 import mpImg from '../../../assets/mp2.png';
 import { Link as RouterLink } from 'react-router-dom';
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Actions = ({ event, setSelectedEvent, className, ...rest }) => {
+const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
   const classes = useStyles();
   const [openShare, setOpenShare] = useState(false);
   const { isLiked, handleLike, loading } = useLikes(event);
@@ -93,7 +94,16 @@ const Actions = ({ event, setSelectedEvent, className, ...rest }) => {
         <Grid item lg={4} sm={6} xs={12}>
           <Card className={clsx(classes.card, className)} {...rest}>
             <Box flexGrow={1} className={classes.item}>
-              <img alt="Donate" className={classes.image} src={mpImg} />
+              {!hasItems ? (
+                <img alt="Donate" className={classes.image} src={mpImg} />
+              ) : (
+                <ListIcon
+                  className={classes.image}
+                  style={{ color: 'rgb(84, 101, 209)' }}
+                  width={'87px'}
+                  height={'87px'}
+                />
+              )}
             </Box>
             <Box flexGrow={1}>
               <Button

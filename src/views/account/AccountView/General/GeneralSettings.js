@@ -51,6 +51,7 @@ const GeneralSettings = ({ className, user, ...rest }) => {
     setSelectedCity('');
     fetchCities(selectedState);
   };
+
   const onCityChange = async (event, selectedCity) => {
     setSelectedCity(selectedCity);
   };
@@ -137,6 +138,7 @@ const GeneralSettings = ({ className, user, ...rest }) => {
         handleChange,
         handleSubmit,
         isSubmitting,
+        setFieldValue,
         touched,
         values
       }) => (
@@ -201,7 +203,13 @@ const GeneralSettings = ({ className, user, ...rest }) => {
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <Countries type="update" value={values.country} />
+                  <Countries
+                    type="update"
+                    value={values.country}
+                    setFieldValue={setFieldValue}
+                    handleChange={handleChange}
+                    onStateChange={onStateChange}
+                  />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <Autocomplete

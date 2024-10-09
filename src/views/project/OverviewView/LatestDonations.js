@@ -20,11 +20,11 @@ import {
   makeStyles,
   Typography
 } from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import GenericMoreButton from 'src/components/GenericMoreButton';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 import Label from 'src/components/Label';
 import API from '../../../api/Api';
 import NoResults from '../../../components/NoResults/NoResults';
+import { Pagination } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -46,12 +46,25 @@ const useStyles = makeStyles(theme => ({
 const LatestDonations = ({ event, className, ...rest }) => {
   const classes = useStyles();
   const [donations, setDonations] = useState([]);
+  const [page, setPage] = useState(1);
+
+  const handleChangePage = (event, value) => {
+    setPage(value);
+  };
+
+  const getPageSize = () => {
+    let pageSize = 1;
+    if (!!donations.results) {
+      pageSize = Math.ceil(donations.count / 15);
+    }
+    return pageSize;
+  };
 
   useEffect(() => {
     if (event.id) {
       getDonationsByEvent();
     }
-  }, []);
+  }, [page]);
 
   const getDonationsByEvent = async () => {
     try {
@@ -84,8 +97,17 @@ const LatestDonations = ({ event, className, ...rest }) => {
       {!!donations.results && !!donations.results.length > 0 ? (
         <div>
           <CardHeader
-            action={<GenericMoreButton />}
-            title="Últimas donaciones"
+            action={
+              <Button
+                size="small"
+                startIcon={<ImportExportIcon />}
+                variant="outlined"
+                color="secondary"
+              >
+                Exportar
+              </Button>
+            }
+            title="Donaciones de la campaña"
           />
           <Divider />
           <PerfectScrollbar>
@@ -148,15 +170,13 @@ const LatestDonations = ({ event, className, ...rest }) => {
               </Table>
             </Box>
           </PerfectScrollbar>
-          <Box p={2} display="flex" justifyContent="flex-end">
-            <Button
-              component={RouterLink}
-              size="small"
-              to="/app/projects"
-              endIcon={<NavigateNextIcon />}
-            >
-              Ver todo
-            </Button>
+
+          <Box mt={2} mb={2} display="flex" justifyContent="center">
+            <Pagination
+              count={getPageSize()}
+              onChange={handleChangePage}
+              page={page}
+            />
           </Box>
         </div>
       ) : (
