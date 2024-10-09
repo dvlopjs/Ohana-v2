@@ -112,7 +112,11 @@ const Results = ({
           ))}
         </Grid>
         <Box mt={6} display="flex" justifyContent="center">
-          <Pagination count={getPageSize()} onChange={handleChange} />
+          <Pagination
+            count={getPageSize()}
+            onChange={handleChange}
+            page={page}
+          />
         </Box>
       </div>
     )

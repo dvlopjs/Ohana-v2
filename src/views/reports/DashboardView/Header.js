@@ -74,15 +74,15 @@ const useStyles = makeStyles(theme => ({
 const Header = ({ className, ...rest }) => {
   const classes = useStyles();
   const actionRef = useRef(null);
+  const [inputValue, setInputValue] = useState('');
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [timeRange, setTimeRange] = useState(timeRanges[2].text);
   const [mode, setMode] = useState('grid');
   const [events, setEvents] = useState([]);
   const [accountMp, setAccountMp] = useState();
   const [loading, setLoading] = useState(false);
-  const getLastPath = useLastLocation();
   useEffect(() => {
-    fetchEvent(1, 10, '');
+    fetchEvent();
     fetchMpAccount();
   }, []);
 
@@ -174,7 +174,12 @@ const Header = ({ className, ...rest }) => {
         </Grid>
         <Container className={classes.container} maxWidth="lg">
           <Box mt={3}>
-            <Filter onlyName fetchEvent={fetchEvent} />
+            <Filter
+              onlyName
+              fetchEvent={fetchEvent}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+            />
             {!!accountMp &&
               accountMp.name === '' &&
               !!events &&
