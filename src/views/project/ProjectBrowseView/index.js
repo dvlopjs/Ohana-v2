@@ -6,7 +6,6 @@ import Filter from './Filter';
 import Header from './Header';
 import Results from './Results';
 import CircularProgress from '@material-ui/core/CircularProgress';
-// import { useLocation } from 'react-router-dom';
 import useDebounce from 'src/hooks/useDebounce';
 
 const useStyles = makeStyles(theme => ({
@@ -30,11 +29,18 @@ const ProjectBrowseView = () => {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const debouncedSearchTerm = useDebounce(inputValue, 350);
+  const [filters, setFilters] = useState([]);
 
   const handleGetEvents = async () => {
     setLoading(true);
     try {
-      const response = await api.getEvents(page, pageSize, debouncedSearchTerm);
+      const response = await api.getEvents(
+        page,
+        pageSize,
+        debouncedSearchTerm,
+        '',
+        filters
+      );
       setEvents(response);
       setLoading(false);
     } catch (err) {
@@ -44,14 +50,20 @@ const ProjectBrowseView = () => {
 
   useEffect(() => {
     handleGetEvents();
-  }, [debouncedSearchTerm, page]);
+  }, [debouncedSearchTerm, page, filters]);
 
   return (
     <Page className={classes.root} title="Explorar campañas | Ohana">
       <Container maxWidth="lg">
         <Header />
+
         <Box mt={3}>
-          <Filter inputValue={inputValue} setInputValue={setInputValue} />
+          <Filter
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            filters={filters}
+            setFilters={setFilters}
+          />
         </Box>
         {!!loading ? (
           <CircularProgress

@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  Box,
-  TextField,
-  makeStyles
-} from '@material-ui/core';
+import { Box, TextField, makeStyles } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles(() => ({
@@ -16,34 +12,34 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function CountrySelect(params) {
+export default function CountrySelect(props) {
   const classes = useStyles();
   return (
     <Autocomplete
-      id='country-select-demo'
-      className={params.type === 'update' ? classes.update : classes.root}
+      id="country-select-demo"
+      className={props.type === 'update' ? classes.update : classes.root}
       sx={{ width: '100%' }}
       options={countries}
-      inputValue={params.value}
+      inputValue={props.value}
       autoHighlight
-      getOptionLabel={(option) => option.label}
-      renderOption={(option) => (
-        <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }}>
+      getOptionLabel={option => option.label}
+      renderOption={option => (
+        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }}>
           <img
-            loading='lazy'
-            width='20'
+            loading="lazy"
+            width="20"
             src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
             srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-            alt=''
+            alt=""
           />
           {' ' + option.label}
         </Box>
       )}
-      renderInput={(params) => (
+      renderInput={params => (
         <TextField
           {...params}
-          variant='outlined'
-          label='Seleccione un país'
+          variant="outlined"
+          label="Seleccione un país"
           inputProps={{
             ...params.inputProps,
             autoComplete: 'new-password' // disable autocomplete and autofill
@@ -136,7 +132,7 @@ const countries = [
     phone: '242'
   },
   { code: 'CH', label: 'Switzerland', phone: '41' },
-  { code: 'CI', label: 'Cote d\'Ivoire', phone: '225' },
+  { code: 'CI', label: "Cote d'Ivoire", phone: '225' },
   { code: 'CK', label: 'Cook Islands', phone: '682' },
   { code: 'CL', label: 'Chile', phone: '56' },
   { code: 'CM', label: 'Cameroon', phone: '237' },
@@ -262,7 +258,7 @@ const countries = [
   },
   {
     code: 'KP',
-    label: 'Korea, Democratic People\'s Republic of',
+    label: "Korea, Democratic People's Republic of",
     phone: '850'
   },
   { code: 'KR', label: 'Korea, Republic of', phone: '82' },
@@ -271,7 +267,7 @@ const countries = [
   { code: 'KZ', label: 'Kazakhstan', phone: '7' },
   {
     code: 'LA',
-    label: 'Lao People\'s Democratic Republic',
+    label: "Lao People's Democratic Republic",
     phone: '856'
   },
   { code: 'LB', label: 'Lebanon', phone: '961' },

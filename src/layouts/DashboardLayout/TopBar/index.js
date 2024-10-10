@@ -15,8 +15,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import Logo from 'src/components/Logo';
 import { THEMES } from 'src/constants/constants';
 import Account from './Account';
-import Notifications from './Notifications';
-import Search from './Search';
 import Settings from './Settings';
 
 const useStyles = makeStyles(theme => ({
@@ -58,8 +56,8 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
           </RouterLink>
         </Hidden>
         <Box ml={2} flexGrow={1} />
-        <Search />
-        <Notifications />
+        {/* <Search /> */}
+        {/* <Notifications /> */}
         <Settings />
         <Box ml={2}>
           <Account />

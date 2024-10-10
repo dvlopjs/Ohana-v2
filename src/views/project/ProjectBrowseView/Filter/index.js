@@ -1,7 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Box, Card, Chip, Divider, Input, makeStyles } from '@material-ui/core';
+import {
+  Box,
+  Card,
+  Chip,
+  Divider,
+  Input,
+  makeStyles,
+  Typography
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import MultiSelect from './MultiSelect';
 import api from '../../../../api/Api';
@@ -22,18 +30,14 @@ const Filter = ({
   inputValue,
   setInputValue,
   onApplyFilters,
+  filters,
+  setFilters,
   ...rest
 }) => {
   const classes = useStyles();
   const [selectOptions, setSelectOptions] = useState([]);
   const [categoriesNames, setCategoriesNames] = useState([]);
   const [chips, setChips] = useState([]);
-  const [filters, setFilters] = useState({
-    tipos: [],
-    ubicaciones: [],
-    categorias: [],
-    nombre: ''
-  });
 
   useEffect(() => {
     fetchCategories();
@@ -65,63 +69,31 @@ const Filter = ({
       console.error(e);
     }
   };
-
   const handleInputChange = event => {
     const newValue = event.target.value;
     setInputValue(newValue);
-    setFilters(prev => ({ ...prev, nombre: newValue }));
-    applyFilters({ ...filters, nombre: newValue });
   };
-
   const handleChipDelete = chip => {
     setChips(prevChips => prevChips.filter(prevChip => chip !== prevChip));
 
-    // Actualizar filtros
-    const updatedFilters = { ...filters };
-    Object.keys(updatedFilters).forEach(key => {
-      updatedFilters[key] = updatedFilters[key].filter(item => item !== chip);
-    });
+    const updatedFilters = filters.filter(item => item !== chip);
+
     setFilters(updatedFilters);
-    applyFilters(updatedFilters);
+  };
+  const handleMultiSelectChange = (label, selectedOptions) => {
+    const updatedFilters = [
+      ...filters.filter(
+        filter =>
+          !selectOptions
+            .find(opt => opt.label === label)
+            .options.includes(filter)
+      ),
+      ...selectedOptions
+    ];
+    setFilters(updatedFilters);
+    setChips([...chips, ...selectedOptions]);
   };
 
-  const handleMultiSelectChange = useCallback(
-    (label, selectedOptions) => {
-      const filterKey =
-        label.toLowerCase() === 'tipo'
-          ? 'tipos'
-          : label.toLowerCase() === 'ubicación'
-          ? 'ubicaciones'
-          : 'categorias';
-
-      const updatedFilters = {
-        ...filters,
-        [filterKey]: selectedOptions
-      };
-
-      setFilters(updatedFilters);
-      setChips([
-        ...new Set([
-          ...updatedFilters.tipos,
-          ...updatedFilters.ubicaciones,
-          ...updatedFilters.categorias
-        ])
-      ]);
-      applyFilters(updatedFilters);
-    },
-    [filters]
-  );
-
-  const applyFilters = useCallback(
-    currentFilters => {
-      if (onApplyFilters) {
-        onApplyFilters(currentFilters);
-      }
-    },
-    [onApplyFilters]
-  );
-
-  console.log(filters);
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <Box p={2} display="flex" alignItems="center">
@@ -139,15 +111,22 @@ const Filter = ({
         <div>
           <Divider />
           <Box p={2} display="flex" alignItems="center" flexWrap="wrap">
-            {chips.map(chip => (
-              <Chip
-                className={classes.chip}
-                key={chip}
-                label={chip}
-                onDelete={() => handleChipDelete(chip)}
-              />
-            ))}
+            {!chips.length ? (
+              <Typography variant="body2" color="textSecondary">
+                Comienza a agregar los filtros que necesites...
+              </Typography>
+            ) : (
+              chips.map(chip => (
+                <Chip
+                  className={classes.chip}
+                  key={chip}
+                  label={chip}
+                  onDelete={() => handleChipDelete(chip)}
+                />
+              ))
+            )}
           </Box>
+
           <Divider />
           <Box display="flex" alignItems="center" flexWrap="wrap" p={1}>
             {selectOptions.map(option => (
@@ -158,15 +137,9 @@ const Filter = ({
                   handleMultiSelectChange(option.label, selectedOptions)
                 }
                 options={option.options}
-                value={
-                  filters[
-                    option.label.toLowerCase() === 'tipo'
-                      ? 'tipos'
-                      : option.label.toLowerCase() === 'ubicación'
-                      ? 'ubicaciones'
-                      : 'categorias'
-                  ]
-                }
+                value={filters.filter(filter =>
+                  option.options.includes(filter)
+                )}
               />
             ))}
           </Box>
