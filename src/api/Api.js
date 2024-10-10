@@ -312,6 +312,30 @@ class API {
     const { data } = await axiosInstance.put(path, form, config);
     return data;
   }
+
+  static async exportDonations(idEvent) {
+    const config = {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+      responseType: 'blob' // Importante para descargar archivos binarios
+    };
+    let path = `/api/donations/report/?event=${idEvent}`;
+    const form = {};
+    const blob = new Blob([data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    // Create a link element, set the download attribute with a filename, and click it
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'donations_report.xlsx';
+    link.click();
+
+    // Clean up by revoking the Object URL
+    window.URL.revokeObjectURL(link.href);
+
+    const { data } = await axiosInstance.get(path, form, config);
+    return data;
+  }
 }
 
 export default API;

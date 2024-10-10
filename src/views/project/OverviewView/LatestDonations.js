@@ -65,6 +65,12 @@ const LatestDonations = ({ event, className, ...rest }) => {
     }
   }, [page]);
 
+  const handleExportDonations = () => {
+    window.location.replace(
+      `http://ec2-3-145-91-44.us-east-2.compute.amazonaws.com/api/donations/report/?event=${event.id}`
+    );
+  };
+
   const getDonationsByEvent = async () => {
     try {
       const dona = await API.getDonationsByEvent(event.id);
@@ -101,6 +107,7 @@ const LatestDonations = ({ event, className, ...rest }) => {
                 size="small"
                 startIcon={<ImportExportIcon />}
                 variant="outlined"
+                onClick={handleExportDonations}
                 color="secondary"
               >
                 Exportar
