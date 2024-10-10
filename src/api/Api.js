@@ -2,9 +2,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import localidades from '../constants/localidades.json';
 
-const axiosInstance = axios.create({
-  baseURL: 'https://legendary-tribble-w97w4gjp6jvhgj59-8000.app.github.dev/'
-});
+const axiosInstance = axios.create();
 
 axiosInstance.interceptors.response.use(
   response => response,
@@ -44,11 +42,17 @@ class API {
   }
 
   //Obtener campañas
-  static async getEvents(page = 1, pageSize = 1, search, state) {
+  static async getEvents(page = 1, pageSize = 15, search, state, filters) {
+    const formattedFilters = filters.map(filter => {
+      if (filter === 'Monetaria') return 'Monetary';
+      if (filter === 'Fisica') return 'Items';
+      if (filter === 'Córdoba') return 'Cordoba';
+      return filter;
+    });
     const config = {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` }
     };
-    let path = `/api/events/list/?page=${page}&page_size=${pageSize}`;
+    let path = `/api/events/list/?page=${page}&page_size=${pageSize}&filters=${formattedFilters}`;
     if (!!search) {
       path = `${path}&q=${search}`;
     }

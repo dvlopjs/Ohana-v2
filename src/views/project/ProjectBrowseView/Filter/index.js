@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -81,6 +81,7 @@ const Filter = ({
     setFilters(updatedFilters);
   };
   const handleMultiSelectChange = (label, selectedOptions) => {
+    // Actualizar filtros eliminando las opciones no seleccionadas del grupo actual
     const updatedFilters = [
       ...filters.filter(
         filter =>
@@ -90,10 +91,21 @@ const Filter = ({
       ),
       ...selectedOptions
     ];
-    setFilters(updatedFilters);
-    setChips([...chips, ...selectedOptions]);
-  };
 
+    setFilters(updatedFilters);
+
+    // Actualizar los chips:
+    // 1. Filtrar los chips del grupo actual (basado en el label)
+    const remainingChips = chips.filter(
+      chip =>
+        !selectOptions.find(opt => opt.label === label).options.includes(chip)
+    );
+
+    // 2. Combinar los chips que quedan con las nuevas selecciones
+    const finalChips = [...remainingChips, ...selectedOptions];
+
+    setChips(finalChips);
+  };
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <Box p={2} display="flex" alignItems="center">
