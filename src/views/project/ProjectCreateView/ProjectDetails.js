@@ -298,6 +298,7 @@ const ProjectDetails = ({
                 onClick={() => setFieldTouched('startDate')}
                 onChange={date => setFieldValue('startDate', date)}
                 value={values.startDate}
+                disablePast={true}
               />
               <DatePicker
                 className={classes.datePicker}
@@ -311,6 +312,8 @@ const ProjectDetails = ({
                 onClick={() => setFieldTouched('endDate')}
                 onChange={date => setFieldValue('endDate', date)}
                 value={values.endDate}
+                disablePast={true}
+                minDate={values.startDate}
               />
             </Box>
             {Boolean(touched.startDate && errors.startDate) && (
