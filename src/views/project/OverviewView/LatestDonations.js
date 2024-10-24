@@ -121,7 +121,7 @@ const LatestDonations = ({ event, className, ...rest }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Numero</TableCell>
+                    <TableCell>Número</TableCell>
                     <TableCell>Nombre</TableCell>
                     <TableCell>Estado del pago</TableCell>
                     <TableCell sortDirection="desc">

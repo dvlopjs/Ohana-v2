@@ -64,6 +64,15 @@ const Results = ({
     return pageSize;
   };
 
+  const renderCondition = (project) => {
+    let completed = project.complete;
+    let inactiveMP = (project.event_type.name == "Monetary" && !project.active_mp)
+    if (project.event_type.name == "Monetary") {
+      return !completed && !inactiveMP
+    }
+    return !completed
+  }
+
   return !!projects.results && projects.results.length === 0 ? (
     <Card>
       <NoResults title={'No se encontraron resultados'} />
@@ -99,17 +108,21 @@ const Results = ({
           </Box>
         </Box>
         <Grid container spacing={3}>
-          {projects.results.map(project => (
-            <Grid
-              item
-              key={project.id}
-              md={mode === 'grid' ? 4 : 12}
-              sm={mode === 'grid' ? 6 : 12}
-              xs={12}
-            >
-              <CardEvents project={project} userMode={false} />
-            </Grid>
-          ))}
+          {projects.results.map(project => {
+            if (renderCondition(project)) {
+              return ((
+                <Grid
+                  item
+                  key={project.id}
+                  md={mode === 'grid' ? 4 : 12}
+                  sm={mode === 'grid' ? 6 : 12}
+                  xs={12}
+                >
+                  <CardEvents project={project} userMode={false} />
+                </Grid>
+              ))
+            }
+          })}
         </Grid>
         <Box mt={6} display="flex" justifyContent="center">
           <Pagination

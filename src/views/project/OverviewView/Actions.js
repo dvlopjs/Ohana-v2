@@ -74,7 +74,7 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
     <Page className={classes.root} title="Dashboard">
       {/* <Container> */}
       <Grid container spacing={3}>
-        <Grid item lg={4} sm={6} xs={12}>
+        <Grid item lg={!event.complete ? 4 : 6} sm={6} xs={12}>
           <Card className={clsx(classes.card, className)} {...rest}>
             <Box flexGrow={1} className={classes.item}>
               <img alt="Share" className={classes.image} src={shareSVG} />
@@ -91,34 +91,36 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
             </Box>
           </Card>
         </Grid>
-        <Grid item lg={4} sm={6} xs={12}>
-          <Card className={clsx(classes.card, className)} {...rest}>
-            <Box flexGrow={1} className={classes.item}>
-              {!hasItems ? (
-                <img alt="Donate" className={classes.image} src={mpImg} />
-              ) : (
-                <ListIcon
-                  className={classes.image}
-                  style={{ color: 'rgb(84, 101, 209)' }}
-                  width={'87px'}
-                  height={'87px'}
-                />
-              )}
-            </Box>
-            <Box flexGrow={1}>
-              <Button
-                className={classes.button2}
-                color="secondary"
-                variant="contained"
-                component={RouterLink}
-                to={`/app/donate/${event.id}`}
-              >
-                Donar
-              </Button>
-            </Box>
-          </Card>
-        </Grid>
-        <Grid item lg={4} sm={6} xs={12}>
+        {!event.complete && (
+          <Grid item lg={4} sm={6} xs={12}>
+            <Card className={clsx(classes.card, className)} {...rest}>
+              <Box flexGrow={1} className={classes.item}>
+                {!hasItems ? (
+                  <img alt="Donate" className={classes.image} src={mpImg} />
+                ) : (
+                  <ListIcon
+                    className={classes.image}
+                    style={{ color: 'rgb(84, 101, 209)' }}
+                    width={'87px'}
+                    height={'87px'}
+                  />
+                )}
+              </Box>
+              <Box flexGrow={1}>
+                <Button
+                  className={classes.button2}
+                  color="secondary"
+                  variant="contained"
+                  component={RouterLink}
+                  to={`/app/donate/${event.id}`}
+                >
+                  Donar
+                </Button>
+              </Box>
+            </Card>
+          </Grid>
+        )}
+        <Grid item lg={!event.complete ? 4 : 6} sm={6} xs={12}>
           <Card className={clsx(classes.card, className)} {...rest}>
             <Box flexGrow={1} className={classes.item}>
               <img alt="Subscribe" className={classes.image} src={like} />
