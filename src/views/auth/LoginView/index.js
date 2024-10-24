@@ -111,6 +111,14 @@ const LoginView = () => {
             >
               Crear una cuenta
             </Link>
+            <Link
+              component={RouterLink}
+              to="/password-recover"
+              variant="body2"
+              color="textSecondary"
+            >
+              Recuperar contraseña
+            </Link>
           </CardContent>
         </Card>
       </Container>

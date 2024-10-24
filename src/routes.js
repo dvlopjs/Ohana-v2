@@ -64,8 +64,15 @@ const routes = [
   },
   {
     exact: true,
-    path: '/register-unprotected',
-    component: lazy(() => import('src/views/auth/RegisterView'))
+    guard: GuestGuard,
+    path: '/password-recover',
+    component: lazy(() => import('src/views/auth/PasswordRecoverView'))
+  },
+  {
+    exact: true,
+    guard: GuestGuard,
+    path: '/app/recover/password/',
+    component: lazy(() => import('src/views/auth/ChangePasswordView'))
   },
   {
     path: '/app',

@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import {
   Box,
   Button,
@@ -6,66 +10,44 @@ import {
   Link,
   makeStyles,
   TextField,
-  Typography
+  Typography,
 } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 import clsx from 'clsx';
-import { Formik } from 'formik';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import useAuth from 'src/hooks/useAuth';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import * as Yup from 'yup';
 import API from '../../../api/Api';
 import Countries from '../../../components/Countries';
-import { useSnackbar } from 'notistack';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const STATES = [
-  'Buenos Aires',
-  'Buenos Aires Capital',
-  'Catamarca',
-  'Chaco',
-  'Chubut',
-  'Cordoba',
-  'Corrientes',
-  'Entre Rios',
-  'Formosa',
-  'Jujuy',
-  'La Pampa',
-  'La Rioja',
-  'Mendoza',
-  'Misiones',
-  'Neuquen',
-  'Rio Negro',
-  'Salta',
-  'San Juan',
-  'San Luis',
-  'Santa Cruz',
-  'Santa Fe',
-  'Santiago del Estero',
-  'Tierra del Fuego',
-  'Tucuman'
+  'Buenos Aires', 'Buenos Aires Capital', 'Catamarca', 'Chaco', 
+  'Chubut', 'Cordoba', 'Corrientes', 'Entre Rios', 'Formosa', 
+  'Jujuy', 'La Pampa', 'La Rioja', 'Mendoza', 'Misiones', 
+  'Neuquen', 'Rio Negro', 'Salta', 'San Juan', 'San Luis', 
+  'Santa Cruz', 'Santa Fe', 'Santiago del Estero', 
+  'Tierra del Fuego', 'Tucuman'
 ];
 
 const useStyles = makeStyles(() => ({
   root: {},
   div: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textField: {
-    width: '90%'
+    width: '90%',
   },
   span: {
-    width: '5%'
+    width: '5%',
   },
   progress: {
-    marginTop: '30px'
+    marginTop: '30px',
   },
   autocomplete: {
     width: '90%',
-    marginTop: '8px'
-  }
+    marginTop: '8px',
+  },
 }));
 
 const JWTRegister = ({ history, className, ...rest }) => {
@@ -104,41 +86,15 @@ const JWTRegister = ({ history, className, ...rest }) => {
           phone: '',
           country: '',
           province: '',
-          city: ''
-          //policy: false,
-          //submit: null
+          city: '',
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email('Debe ingresar un email válido')
-            .max(255)
-            .required('Email es requerido'),
-          username: Yup.string()
-            .max(255)
-            .required('Usuario es requerido'),
-          password: Yup.string()
-            .min(7)
-            .max(255)
-            .required('Contraseña es requerida'),
-          first_name: Yup.string()
-            .max(255)
-            .required('Nombre es requerido'),
-          last_name: Yup.string()
-            .max(255)
-            .required('Apellido es requerido'),
-          phone: Yup.string()
-            .max(255)
-            .required('Teléfono es requerido')
-          /*country: Yup.string()
-          .max(255)
-          .required('País es requerido'),*/
-          /*province: Yup.string()
-          .max(255)
-          .required('Provincia es requerido'),
-        city: Yup.string()
-          .max(255)
-          //.required('Ciudad es requerido'),*/
-          //policy: Yup.boolean().oneOf([true], '¡Debe completar todos los campos!')
+          email: Yup.string().email('Debe ingresar un email válido').max(255).required('Email es requerido'),
+          username: Yup.string().max(255).required('Usuario es requerido'),
+          password: Yup.string().min(7).max(255).required('Contraseña es requerida'),
+          first_name: Yup.string().max(255).required('Nombre es requerido'),
+          last_name: Yup.string().max(255).required('Apellido es requerido'),
+          phone: Yup.string().max(255).required('Teléfono es requerido'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           values.country = 1;
@@ -153,20 +109,17 @@ const JWTRegister = ({ history, className, ...rest }) => {
             }
             setLoader(true);
             enqueueSnackbar('Usuario creado exitosamente.', {
-              variant: 'success'
+              variant: 'success',
             });
-            setTimeout(function() {
+            setTimeout(() => {
               history.replace('/login');
             }, 3000);
           } catch (err) {
             console.error(err);
             if (err.response && err.response.status) {
-              enqueueSnackbar(
-                'No se pudo crear el usuario, por favor intente nuevamente',
-                {
-                  variant: 'error'
-                }
-              );
+              enqueueSnackbar('No se pudo crear el usuario, por favor intente nuevamente', {
+                variant: 'error',
+              });
             }
             setStatus({ success: false });
             setErrors({ submit: err.message });
@@ -174,15 +127,7 @@ const JWTRegister = ({ history, className, ...rest }) => {
           }
         }}
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values
-        }) => (
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form
             noValidate
             className={clsx(classes.root, className)}
@@ -280,20 +225,18 @@ const JWTRegister = ({ history, className, ...rest }) => {
             <div className={classes.div}>
               <Autocomplete
                 className={classes.autocomplete}
-                sx={{ width: 300 }}
                 options={STATES}
                 autoHighlight
                 onInputChange={onStateChange}
-                getOptionLabel={option => option}
-                renderOption={option => option}
-                renderInput={params => (
+                getOptionLabel={(option) => option}
+                renderInput={(params) => (
                   <TextField
                     {...params}
                     variant="outlined"
                     label="Seleccione una provincia"
                     inputProps={{
                       ...params.inputProps,
-                      autoComplete: 'new-password'
+                      autoComplete: 'new-password',
                     }}
                   />
                 )}
@@ -301,47 +244,32 @@ const JWTRegister = ({ history, className, ...rest }) => {
               <span className={classes.span} />
               <Autocomplete
                 className={classes.autocomplete}
-                sx={{ width: 300 }}
                 options={cities}
                 autoHighlight
                 onInputChange={onCityChange}
-                getOptionLabel={option => option}
-                renderOption={option => option}
-                renderInput={params => (
+                getOptionLabel={(option) => option}
+                renderInput={(params) => (
                   <TextField
                     {...params}
                     variant="outlined"
                     label="Seleccione una ciudad"
                     inputProps={{
                       ...params.inputProps,
-                      autoComplete: 'new-password'
+                      autoComplete: 'new-password',
                     }}
                   />
                 )}
               />
             </div>
             <Box alignItems="center" display="flex" mt={2} ml={-1}>
-              <Checkbox
-                //checked={values.policy}
-                checked
-                name="policy"
-                //onChange={handleChange}
-              />
+              <Checkbox checked name="policy" />
               <Typography variant="body2" color="textSecondary">
                 Debe aceptar los{' '}
                 <Link component="a" href="#" color="secondary">
-                  Terminos y Condiciones
+                  Términos y Condiciones
                 </Link>
               </Typography>
             </Box>
-            {/*Boolean(touched.policy && errors.policy) && (
-            <FormHelperText error>{errors.policy}</FormHelperText>
-          )*/}
-            {/*errors.submit && (
-            <Box mt={3}>
-              <FormHelperText error>{errors.submit}</FormHelperText>
-            </Box>
-          )*/}
             <Box mt={2}>
               <Button
                 color="secondary"
@@ -357,15 +285,13 @@ const JWTRegister = ({ history, className, ...rest }) => {
           </form>
         )}
       </Formik>
-      {!!loader && (
-        <LinearProgress className={classes.progress} color="primary" />
-      )}
+      {loader && <LinearProgress className={classes.progress} color="primary" />}
     </div>
   );
 };
 
 JWTRegister.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default JWTRegister;

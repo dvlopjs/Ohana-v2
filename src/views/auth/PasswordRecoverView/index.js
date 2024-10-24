@@ -14,9 +14,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Logo from 'src/components/Logo';
 import Page from 'src/components/Page';
 import useAuth from 'src/hooks/useAuth';
-import Auth0Register from './Auth0Register';
-import FirebaseAuthRegister from './FirebaseAuthRegister';
-import JWTRegister from './JWTRegister';
+import PasswordRecoverForm from './PasswordRecoverForm';
 
 const methodIcons = {
   Auth0: '/static/images/auth0.svg',
@@ -50,12 +48,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const RegisterView = ({ history }) => {
+const PasswordRecoverView = ({ history }) => {
   const classes = useStyles();
   const { method } = useAuth();
 
   return (
-    <Page className={classes.root} title="Registrar">
+    <Page className={classes.root} title="Recuperar contraseña">
       <Container className={classes.cardContainer} maxWidth="sm">
         <Box mb={1} display="flex" justifyContent="center">
           <RouterLink to="/">
@@ -72,7 +70,7 @@ const RegisterView = ({ history }) => {
             >
               <div>
                 <Typography color="textPrimary" gutterBottom variant="h2">
-                  Registrar
+                    Recuperar contraseña
                 </Typography>
               </div>
               <div className={classes.currentMethodIcon}>
@@ -80,9 +78,7 @@ const RegisterView = ({ history }) => {
               </div>
             </Box>
             <Box flexGrow={1} mt={3}>
-              {method === 'Auth0' && <Auth0Register />}
-              {method === 'FirebaseAuth' && <FirebaseAuthRegister />}
-              {method === 'JWT' && <JWTRegister history={history} />}
+              <PasswordRecoverForm history={history} />
             </Box>
             <Box mb={3}>
               <Divider />
@@ -93,7 +89,7 @@ const RegisterView = ({ history }) => {
               variant="body2"
               color="textSecondary"
             >
-              Tengo una cuenta
+              Iniciar sesión
             </Link>
           </CardContent>
         </Card>
@@ -102,8 +98,8 @@ const RegisterView = ({ history }) => {
   );
 };
 
-RegisterView.propTypes = {
+PasswordRecoverView.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-export default RegisterView;
+export default PasswordRecoverView;

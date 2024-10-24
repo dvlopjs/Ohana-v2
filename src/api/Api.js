@@ -140,6 +140,19 @@ class API {
     return data;
   }
 
+  static async passwordRecover(username) {
+    let path = `/api/auth/recover/?username=${username}`;
+    const { data } = await axiosInstance.put(path);
+    return data;
+  }
+
+  static async changePasswordPin(pin, password) {
+    let path = `/api/auth/change-password-pin/?pin=${pin}&password=${password}`
+    const { data } = await axiosInstance.put(path);
+    return data;
+  }
+
+
   //login
   static async login(logueo) {
     let path = `/api/auth/signin/`;
