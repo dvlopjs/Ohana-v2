@@ -42,7 +42,7 @@ class API {
   }
 
   //Obtener campañas
-  static async getEvents(page = 1, pageSize = 15, search, state, filters) {
+  static async getEvents(page = 1, pageSize = 15, search, state, filters, finished=false) {
     const formattedFilters = filters.map(filter => {
       if (filter === 'Monetaria') return 'Monetary';
       if (filter === 'Fisica') return 'Items';
@@ -52,7 +52,7 @@ class API {
     const config = {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` }
     };
-    let path = `/api/events/list/?page=${page}&page_size=${pageSize}&filters=${formattedFilters}`;
+    let path = `/api/events/list/?page=${page}&page_size=${pageSize}&filters=${formattedFilters}&finished=${!finished}`;
     if (!!search) {
       path = `${path}&q=${search}`;
     }

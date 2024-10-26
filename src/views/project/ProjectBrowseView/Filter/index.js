@@ -8,7 +8,8 @@ import {
   Divider,
   Input,
   makeStyles,
-  Typography
+  Typography,
+  Switch
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import MultiSelect from './MultiSelect';
@@ -21,6 +22,13 @@ const useStyles = makeStyles(theme => ({
   },
   chip: {
     margin: theme.spacing(1)
+  },
+  switch: {
+    marginLeft: theme.spacing(2) // Adds space between MultiSelect and Switch
+  },
+  switchLabel: {
+    marginLeft: theme.spacing(1), // Adds space before the label
+    marginRight: theme.spacing(2), // Adds space between the label and the switch
   }
 }));
 
@@ -32,6 +40,8 @@ const Filter = ({
   onApplyFilters,
   filters,
   setFilters,
+  finished,
+  setFinished,
   ...rest
 }) => {
   const classes = useStyles();
@@ -45,67 +55,44 @@ const Filter = ({
 
   useEffect(() => {
     setSelectOptions([
-      {
-        label: 'Tipo',
-        options: ['Monetaria', 'Fisica']
-      },
-      {
-        label: 'Ubicación',
-        options: ['Córdoba', 'Buenos Aires', 'Neuquén', 'Mendoza', 'Salta']
-      },
-      {
-        label: 'Categoría',
-        options: categoriesNames
-      }
+      { label: 'Tipo', options: ['Monetaria', 'Fisica'] },
+      { label: 'Ubicación', options: ['Córdoba', 'Buenos Aires', 'Neuquén', 'Mendoza', 'Salta'] },
+      { label: 'Categoría', options: categoriesNames }
     ]);
   }, [categoriesNames]);
 
   const fetchCategories = async () => {
     try {
-      let response = await api.getCategories();
+      const response = await api.getCategories();
       const catNames = response.map(category => category.name);
       setCategoriesNames(catNames);
     } catch (e) {
       console.error(e);
     }
   };
+
   const handleInputChange = event => {
-    const newValue = event.target.value;
-    setInputValue(newValue);
+    setInputValue(event.target.value);
   };
+
   const handleChipDelete = chip => {
-    setChips(prevChips => prevChips.filter(prevChip => chip !== prevChip));
-
+    const updatedChips = chips.filter(prevChip => prevChip !== chip);
+    setChips(updatedChips);
     const updatedFilters = filters.filter(item => item !== chip);
-
     setFilters(updatedFilters);
   };
+
   const handleMultiSelectChange = (label, selectedOptions) => {
-    // Actualizar filtros eliminando las opciones no seleccionadas del grupo actual
     const updatedFilters = [
-      ...filters.filter(
-        filter =>
-          !selectOptions
-            .find(opt => opt.label === label)
-            .options.includes(filter)
-      ),
+      ...filters.filter(filter => !selectOptions.find(opt => opt.label === label).options.includes(filter)),
       ...selectedOptions
     ];
-
     setFilters(updatedFilters);
 
-    // Actualizar los chips:
-    // 1. Filtrar los chips del grupo actual (basado en el label)
-    const remainingChips = chips.filter(
-      chip =>
-        !selectOptions.find(opt => opt.label === label).options.includes(chip)
-    );
-
-    // 2. Combinar los chips que quedan con las nuevas selecciones
-    const finalChips = [...remainingChips, ...selectedOptions];
-
-    setChips(finalChips);
+    const remainingChips = chips.filter(chip => !selectOptions.find(opt => opt.label === label).options.includes(chip));
+    setChips([...remainingChips, ...selectedOptions]);
   };
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <Box p={2} display="flex" alignItems="center">
@@ -141,19 +128,28 @@ const Filter = ({
 
           <Divider />
           <Box display="flex" alignItems="center" flexWrap="wrap" p={1}>
-            {selectOptions.map(option => (
-              <MultiSelect
-                key={option.label}
-                label={option.label}
-                onChange={selectedOptions =>
-                  handleMultiSelectChange(option.label, selectedOptions)
-                }
-                options={option.options}
-                value={filters.filter(filter =>
-                  option.options.includes(filter)
-                )}
-              />
-            ))}
+            <Box display="flex" flexGrow={1} flexWrap="wrap">
+              {selectOptions.map(option => (
+                <MultiSelect
+                  key={option.label}
+                  label={option.label}
+                  onChange={selectedOptions => handleMultiSelectChange(option.label, selectedOptions)}
+                  options={option.options}
+                  value={filters.filter(filter => option.options.includes(filter))}
+                />
+              ))}
+            </Box>
+
+            <Typography className={classes.formControlLabel} variant="body2" color="textPrimary">
+              {finished ? 'ACTIVAS' : 'FINALIZADAS'}
+            </Typography>
+
+            <Switch
+              checked={finished}
+              onChange={()=>setFinished(!finished)}
+              className={classes.switch}
+              color="primary" // You can specify other props as needed
+            />
           </Box>
         </div>
       )}
@@ -165,8 +161,10 @@ Filter.propTypes = {
   className: PropTypes.string,
   onlyName: PropTypes.bool,
   inputValue: PropTypes.string,
-  setInputValue: PropTypes.func,
-  onApplyFilters: PropTypes.func
+  setInputValue: PropTypes.func.isRequired,
+  onApplyFilters: PropTypes.func,
+  filters: PropTypes.array.isRequired,
+  setFilters: PropTypes.func.isRequired
 };
 
 export default Filter;

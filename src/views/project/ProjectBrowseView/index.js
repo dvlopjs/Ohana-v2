@@ -30,6 +30,7 @@ const ProjectBrowseView = () => {
   const [inputValue, setInputValue] = useState('');
   const debouncedSearchTerm = useDebounce(inputValue, 350);
   const [filters, setFilters] = useState([]);
+  const [finished, setFinished] = useState(true);
 
   const handleGetEvents = async () => {
     setLoading(true);
@@ -39,7 +40,8 @@ const ProjectBrowseView = () => {
         pageSize,
         debouncedSearchTerm,
         '',
-        filters
+        filters,
+        finished
       );
       setEvents(response);
       setLoading(false);
@@ -50,7 +52,7 @@ const ProjectBrowseView = () => {
 
   useEffect(() => {
     handleGetEvents();
-  }, [debouncedSearchTerm, page, filters]);
+  }, [debouncedSearchTerm, page, filters, finished]);
 
   return (
     <Page className={classes.root} title="Explorar campañas | Ohana">
@@ -63,6 +65,8 @@ const ProjectBrowseView = () => {
             setInputValue={setInputValue}
             filters={filters}
             setFilters={setFilters}
+            finished={finished}
+            setFinished={setFinished}
           />
         </Box>
         {!!loading ? (

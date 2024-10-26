@@ -15,15 +15,11 @@ import {
   Typography
 } from '@material-ui/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import Heart from '../assets/corazon.png';
 import DeleteIcon from '@material-ui/icons/Delete';
-import StitchIcon from '../assets/Stitch-heart.svg';
-import StitchDislike from '../assets/Stitch-dislike.png';
-import './Components.css';
 import EditIcon from '@material-ui/icons/Edit';
 import clsx from 'clsx';
 import moment from 'moment';
-import 'moment/locale/es'; // without this line it didn't work
+import 'moment/locale/es';
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -32,9 +28,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import getInitials from 'src/utils/getInitials';
 import api from '../api/Api';
 import Swal from 'sweetalert2';
-//import Swal from 'sweetalert2/src/sweetalert2.js'
 import ShareDialog from './ShareDialog';
 import useLikes from 'src/views/extra/charts/ApexChartsView/hooks/useLikes';
+import Heart from '../assets/corazon.png';
+import StitchIcon from '../assets/Stitch-heart.svg';
+import StitchDislike from '../assets/Stitch-dislike.png';
+import './Components.css';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,15 +49,13 @@ const useStyles = makeStyles(theme => ({
   donateButton: {
     color: colors.amber[600]
   },
-  caption: {
-    minHeight: '20px'
-  },
   membersIcon: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(1)
   },
   buttonsDiv: {
-    display: 'contents'
+    display: 'flex',
+    alignItems: 'center'
   },
   nameBox: {
     display: 'grid'
@@ -82,13 +79,8 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
   const { isLiked, likesCount, handleLike } = useLikes(project);
   const [openShare, setOpenShare] = useState(false);
 
-  const openShareDialog = () => {
-    setOpenShare(true);
-  };
-
-  const closeShareDialog = () => {
-    setOpenShare(false);
-  };
+  const openShareDialog = () => setOpenShare(true);
+  const closeShareDialog = () => setOpenShare(false);
 
   const deleteCampaign = () => {
     Swal.fire({
@@ -101,9 +93,8 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
       confirmButtonText: 'Aceptar'
     }).then(result => {
       if (result.isConfirmed) {
-        api
-          .deleteCampaign(project.id)
-          .then(response => {
+        api.deleteCampaign(project.id)
+          .then(() => {
             Swal.fire({
               title: '¡Su campaña fue eliminada!',
               icon: 'success',
@@ -130,10 +121,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
       <Box p={3}>
         <CardMedia
           className={classes.image}
-          image={
-            project.image ||
-            'https://www.argentina.gob.ar/sites/default/files/vinetas_justicia_cerca_04_quiero_donar_mis_organos.png'
-          }
+          image={project.image || 'https://www.argentina.gob.ar/sites/default/files/vinetas_justicia_cerca_04_quiero_donar_mis_organos.png'}
         />
         <Box display="flex" alignItems="center" mt={2}>
           <Avatar
@@ -155,86 +143,51 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
                 </Typography>
               </Link>
             </Tooltip>
-            <div
-              style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                width: '100%'
-              }}
-            >
-              <Tooltip
-                title={`Por ${project.contact.name} | Actualizado ${moment(
-                  project.updated_at
-                ).fromNow()}`}
-              >
-                <Typography noWrap variant="body2" color="textSecondary">
-                  Por{' '}
-                  <Link
-                    color="textPrimary"
-                    component={RouterLink}
-                    to="#"
-                    variant="h6"
-                  >
-                    {project.contact.name}
-                  </Link>{' '}
-                  | Actualizado {moment(project.updated_at).fromNow()}
-                </Typography>
-              </Tooltip>
-            </div>
+            <Tooltip title={`Por ${project.contact.name} | Actualizado ${moment(project.updated_at).fromNow()}`}>
+              <Typography noWrap variant="body2" color="textSecondary">
+                Por{' '}
+                <Link
+                  color="textPrimary"
+                  component={RouterLink}
+                  to="#"
+                  variant="h6"
+                >
+                  {project.contact.name}
+                </Link>{' '}
+                | Actualizado {moment(project.updated_at).fromNow()}
+              </Typography>
+            </Tooltip>
           </Box>
         </Box>
       </Box>
-      <Box
-        pb={2}
-        px={3}
-        style={{ overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}
-      >
+      <Box pb={2} px={3} style={{ overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
         <Tooltip title={project.description.replace(/<\/?[^>]+(>|$)/g, '')}>
           <Typography noWrap color="textSecondary" variant="body2">
             {project.description.replace(/<\/?[^>]+(>|$)/g, '')}
           </Typography>
         </Tooltip>
       </Box>
-      <Box py={2} px={2} className={classes.description}>
+      <Box py={2} px={2}>
         <Grid alignItems="center" container justify="space-between" spacing={3}>
           <Grid item>
             <Typography variant="h5" color="textPrimary">
               {project.goal === '0.00' ? (
                 <Box display={'flex'} alignItems={'center'} gridGap={4}>
                   <Typography>Bienes</Typography>
-                  <Tooltip
-                    placement="top"
-                    title={
-                      <>
-                        <Typography
-                          variant="h5"
-                          style={{
-                            paddingBottom: '10px'
-                          }}
-                        >
-                          Bienes a donar :
-                        </Typography>
-                        {project.items.map(p => (
-                          <React.Fragment key={p}>
-                            <Box
-                              display={'flex'}
-                              alignItems={'center'}
-                              gridGap={4}
-                            >
-                              {' '}
-                              - <Typography variant="h6">{p}</Typography>
-                            </Box>
-                            <br />
-                          </React.Fragment>
-                        ))}
-                      </>
-                    }
-                    color="primary"
-                  >
-                    <HelpOutlineIcon
-                      fontSize="small"
-                      style={{ cursor: 'pointer' }}
-                    />
+                  <Tooltip title={
+                    <>
+                      <Typography variant="h5" style={{ paddingBottom: '10px' }}>Bienes a donar :</Typography>
+                      {project.items.map(item => (
+                        <React.Fragment key={item}>
+                          <Box display={'flex'} alignItems={'center'} gridGap={4}>
+                            - <Typography variant="h6">{item}</Typography>
+                          </Box>
+                          <br />
+                        </React.Fragment>
+                      ))}
+                    </>
+                  }>
+                    <HelpOutlineIcon fontSize="small" style={{ cursor: 'pointer' }} />
                   </Tooltip>
                 </Box>
               ) : (
@@ -277,10 +230,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
               </IconButton>
             </Tooltip>
             <Tooltip title="Modificar campaña">
-              <IconButton
-                component={RouterLink}
-                to={`/app/projects/edit/${project.id}`}
-              >
+              <IconButton component={RouterLink} to={`/app/projects/edit/${project.id}`}>
                 <EditIcon fontSize="small" />
               </IconButton>
             </Tooltip>
@@ -289,10 +239,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
           <div className={classes.buttonsDiv}>
             {isLiked ? (
               <Tooltip title="Unlike">
-                <IconButton
-                  className={classes.likedButton}
-                  onClick={handleLike}
-                >
+                <IconButton className={classes.likedButton} onClick={handleLike}>
                   <Avatar src={StitchIcon} />
                 </IconButton>
               </Tooltip>
@@ -308,11 +255,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
             </Typography>
             <Tooltip title="Compartir">
               <IconButton onClick={openShareDialog}>
-                <SvgIcon
-                  fontSize="small"
-                  color="action"
-                  className={classes.membersIcon}
-                >
+                <SvgIcon fontSize="small" color="action" className={classes.membersIcon}>
                   <ShareIcon />
                 </SvgIcon>
               </IconButton>
@@ -320,19 +263,18 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
           </div>
         )}
         <Box flexGrow={1} />
-        <Tooltip title="Donar">
-          <Button
-            className={classes.donateButton}
-            href={`/app/donate/${project.id}`}
-          >
-            <Avatar src={Heart}></Avatar>
-            <Typography color="textPrimary" style={{ marginLeft: '5px' }}>
-              Dona!
-            </Typography>
-          </Button>
-        </Tooltip>
+        {(moment(project.end_date).isAfter(moment())  && (project.contact.name != localStorage.getItem("username"))) && (
+          <Tooltip title="Donar">
+            <Button className={classes.donateButton} href={`/app/donate/${project.id}`}>
+              <Avatar src={Heart} />
+              <Typography color="textPrimary" style={{ marginLeft: '5px' }}>
+                Dona!
+              </Typography>
+            </Button>
+          </Tooltip>
+        )}
       </Box>
-      {!!openShare && (
+      {openShare && (
         <ShareDialog
           project={project}
           openShare={openShare}
@@ -345,7 +287,8 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
 
 CardEvents.propTypes = {
   className: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  userMode: PropTypes.bool
 };
 
 export default CardEvents;

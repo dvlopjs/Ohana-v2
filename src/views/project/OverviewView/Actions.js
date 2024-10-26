@@ -12,10 +12,10 @@ import Page from 'src/components/Page';
 import shareSVG from '../../../assets/share-2.svg';
 import like from '../../../assets/like.svg';
 import { List as ListIcon } from 'react-feather';
-
+import moment from 'moment';
 import mpImg from '../../../assets/mp2.png';
 import { Link as RouterLink } from 'react-router-dom';
-import ShareDialog from './../../../components/ShareDialog';
+import ShareDialog from 'src/components/ShareDialog';
 import api from 'src/api/Api';
 import useLikes from 'src/views/extra/charts/ApexChartsView/hooks/useLikes';
 
@@ -70,11 +70,16 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
     setOpenShare(false);
   };
 
+  const displayDonar = () => {
+    return !event.complete &&
+      (event.contact.name !== localStorage.getItem("username")) &&
+      moment(event.end_date).isAfter(moment());
+  };
+
   return (
     <Page className={classes.root} title="Dashboard">
-      {/* <Container> */}
       <Grid container spacing={3}>
-        <Grid item lg={!event.complete ? 4 : 6} sm={6} xs={12}>
+        <Grid item lg={displayDonar() ? 4 : 6} sm={6} xs={12}>
           <Card className={clsx(classes.card, className)} {...rest}>
             <Box flexGrow={1} className={classes.item}>
               <img alt="Share" className={classes.image} src={shareSVG} />
@@ -91,7 +96,8 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
             </Box>
           </Card>
         </Grid>
-        {!event.complete && (
+
+        {displayDonar() && (
           <Grid item lg={4} sm={6} xs={12}>
             <Card className={clsx(classes.card, className)} {...rest}>
               <Box flexGrow={1} className={classes.item}>
@@ -120,7 +126,8 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
             </Card>
           </Grid>
         )}
-        <Grid item lg={!event.complete ? 4 : 6} sm={6} xs={12}>
+
+        <Grid item lg={displayDonar() ? 4 : 6} sm={6} xs={12}>
           <Card className={clsx(classes.card, className)} {...rest}>
             <Box flexGrow={1} className={classes.item}>
               <img alt="Subscribe" className={classes.image} src={like} />
@@ -129,7 +136,7 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
               <Button
                 className={classes.button}
                 onClick={onLike}
-                disabled={loading ? true : false}
+                disabled={loading}
                 color="secondary"
                 variant="contained"
               >
@@ -145,12 +152,12 @@ const Actions = ({ event, setSelectedEvent, className, hasItems, ...rest }) => {
           </Card>
         </Grid>
       </Grid>
-      {/* </Container> */}
-      {!!openShare && (
-        <ShareDialog
-          project={event}
-          openShare={openShare}
-          closeDialog={closeShareDialog}
+      
+      {openShare && (
+        <ShareDialog 
+          project={event} 
+          openShare={openShare} 
+          closeDialog={closeShareDialog} 
         />
       )}
     </Page>
