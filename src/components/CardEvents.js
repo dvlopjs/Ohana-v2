@@ -82,6 +82,13 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
   const openShareDialog = () => setOpenShare(true);
   const closeShareDialog = () => setOpenShare(false);
 
+  const isDeletable = () => {
+    if (project.event_type.name === "Monetary") {
+      return project.funds_collected === "0.00"
+    }
+    return !project.items_complete.some(item => item.done)
+  }
+
   const deleteCampaign = () => {
     Swal.fire({
       title: `¿Está seguro que desea borrar su campaña ${project.name}?`,
@@ -224,11 +231,12 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
       <Box py={2} pl={2} pr={2} display="flex" alignItems="center">
         {userMode ? (
           <div>
+            {isDeletable() && 
             <Tooltip title="Eliminar campaña">
               <IconButton onClick={deleteCampaign}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
-            </Tooltip>
+            </Tooltip>}
             <Tooltip title="Modificar campaña">
               <IconButton component={RouterLink} to={`/app/projects/edit/${project.id}`}>
                 <EditIcon fontSize="small" />
@@ -263,7 +271,7 @@ const CardEvents = ({ className, project, userMode, ...rest }) => {
           </div>
         )}
         <Box flexGrow={1} />
-        {(moment(project.end_date).isAfter(moment())  && (project.contact.name != localStorage.getItem("username"))) && (
+        {(moment(project.end_date).isAfter(moment()) && (project.contact.name != localStorage.getItem("username"))) && (
           <Tooltip title="Donar">
             <Button className={classes.donateButton} href={`/app/donate/${project.id}`}>
               <Avatar src={Heart} />
